@@ -8,8 +8,7 @@ function Header() {
     <header className={`header ${pathname === '/saved-news' ? 'header_white' : ''}`}> 
       <h2 className="header__logo">NewsExplorer</h2> 
       <Navigation />
-    </header> 
-
+    </header>
   ) 
 }
 
