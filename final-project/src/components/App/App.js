@@ -1,29 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import SavedNews from '../SavedNews/SavedNews';
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-
+import PopupWithForm from '../PopupWithForm/PopupWithForm';
+import Preloader from '../Preloader/Preloader';
+// import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { Route, Routes } from 'react-router-dom';
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
+
+  // preloader mounting
+
+  useEffect(() => {
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 5000)
+  }, [])
+
+  // popup functions
+  function handleLoginClick() {
+    setIsPopupOpen(!isPopupOpen)
+  }
+
+  function closeAllPopups(){
+    setIsPopupOpen(false);
+  }
+
   return (
-    <CurrentUserContext.Provider>
-      <div className="app">
-        <Header />
-        <main className="content">
-          <Routes>
-            <Route exact path='/' element={<Main />} />
-            <Route loggedIn={isLoggedIn} path='/' 
-              element = {<ProtectedRoute loggedIn={isLoggedIn} component={SavedNews} > 
-              </ProtectedRoute>} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </CurrentUserContext.Provider>
+    <div className="app">
+      {
+        isLoading ?
+          <Preloader />
+        :
+          ''
+      }
+      <Header login={handleLoginClick} />
+      <main className="content">
+        <Routes>
+          <Route exact path='/' element={<Main />} />
+          <Route exact path='/saved-news' element={<SavedNews />} />
+        </Routes>
+        <PopupWithForm isOpen={isPopupOpen} onClose={closeAllPopups} />
+      </main>
+      <Footer />
+    </div>
   );
 }
 

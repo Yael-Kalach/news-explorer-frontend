@@ -1,7 +1,9 @@
-function Preloader() {
+import icon from '../../images/icons/Preloader/Icon.svg'
+
+function Preloader( props ) {
     return (
-      <div className="Preloader">
-  
+      <div className="preloader">
+        <img className="preloader__icon" alt='Website logo' src={icon}></img>
       </div>
     );
   }

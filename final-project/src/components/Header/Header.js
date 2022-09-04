@@ -1,13 +1,19 @@
 import React from 'react';
 import Navigation from '../Navigation/Navigation';
-import { useLocation } from 'react-router-dom';
+import { useLocation, NavLink } from 'react-router-dom';
 
-function Header() {
+function Header( props ) {
   const { pathname } = useLocation();
+  const [isHamburgerOpen, setIsHamburgerOpen] = React.useState(false)
+
+  const handleHamburgerClick = () => {
+    setIsHamburgerOpen(!isHamburgerOpen)
+  }
+
   return( 
-    <header className={`header ${pathname === '/saved-news' ? 'header_white' : ''}`}> 
-      <h2 className="header__logo">NewsExplorer</h2> 
-      <Navigation />
+    <header className={`header ${pathname === '/saved-news' ? 'header_black' : ''} ${isHamburgerOpen ? 'header_sticky' : ''}`} >
+      <NavLink to="/" className={`header__logo ${pathname === '/saved-news' ? 'header__logo_black' : ''}`}>NewsExplorer</NavLink>
+      <Navigation handleHamburgerClick={handleHamburgerClick} isHamburgerOpen={isHamburgerOpen} login={props.login} />
     </header>
   ) 
 }

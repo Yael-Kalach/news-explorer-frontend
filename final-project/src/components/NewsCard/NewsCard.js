@@ -1,31 +1,36 @@
 import React from 'react';
-import CurrentUserContext from '../contexts/CurrentUserContext';
+import { useLocation } from 'react-router-dom';
 
-function NewsCard({ newsCard, onNewsCardClick, newsCardTooltip }) {
+function NewsCard({ image, title, keyword, date, description, source }) {
+  const [isMarked, setIsMarked] = React.useState(false);
   const { pathname } = useLocation();
 
-  const currentUser = React.useContext(CurrentUserContext);
+  const cardLikeButtonClassName = (
+    `news-card__button 
+    ${pathname === '/saved-news' ? 'news-card__button_trash' : 'news-card__button_bookmark'}
+    ${pathname === '/' && isMarked ? 'news-card__button_bookmarked' : ''}`
+  );
 
-  const isBookmarked = newsCard.likes.some(user => user._id === currentUser._id);
-
-  const newsCardButtonClassName = (
-    `elements__button elements__button_trash ${isBookmarked && pathname === '/saved-news' ? 'elements__button_trash_visible' : 'elements__button_trash_hidden'}`
-  ); 
-  
-  const handleClick = () => {
-    onNewsCardClick(newsCard);
+  const handleBookmark = () => {
+    setIsMarked(!isMarked)
   }
 
     return(
-      <article className="newsCard">
-        <button type="button" aria-label="trash" className={newsCardButtonClassName} onClick={handleDeleteClick}></button>
-        <p className="newsCard__tooltip">{newsCardTooltip}</p>
-        <img className="newsCard__image" src={newsCard.image} alt={newsCard.title} onClick={handleClick} />
-        <p className="newsCard__keyword">{newsCard.keyword}</p>
-        <div className="newsCard__title">
-          <p>{newsCard.date}</p>
-          <h2 className="newsCard__text">{newsCard.title}</h2>
-          <p></p>
+      <article className="news-card">
+        <div className="news-card_top">
+          <p className="news-card__keyword">{keyword}</p>
+          <div className="news-card__icon">
+            <p className="news-card__tooltip">{pathname === '/saved-news' ? "Remove from saved" : "Save article"}</p>
+            <button type="button" aria-label={pathname === '/saved-news' ? "trash" : "bookmark"}
+            className={cardLikeButtonClassName} onClick={handleBookmark} />
+          </div>
+        </div>
+        <img className="news-card__image" src={image} alt={title} />
+        <div className="news-card_bottom">
+          <p className="news-card__date">{date}</p>
+          <h2 className="news-card__title">{title}</h2>
+          <p className="news-card__text">{description}</p>
+          <p className="news-card__source">{source}</p>
         </div>
       </article>
     )
