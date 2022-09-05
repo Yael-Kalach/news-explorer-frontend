@@ -1,13 +1,15 @@
 .footer {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    width: 100%;
+    justify-content: space-between;
+    max-width: 1440px;
     margin: 30px 0;
+    padding: 0 104px;
+    align-items: center;
 }
 
 .footer__copyright {
-    font-family: Roboto;
+    font-family: 'roboto';
     font-size: 16px;
     font-weight: 400;
     line-height: 22px;
@@ -22,7 +24,7 @@
 }
 
 .footer__nav_link {
-    font-family: Roboto;
+    font-family: 'roboto';
     font-size: 18px;
     font-weight: 400;
     line-height: 24px;
@@ -35,6 +37,10 @@
     background: none;
     border: none;
     border-color: #FFFFFF;
+}
+
+.footer__nav_link:nth-child(2) {
+    margin-right: 0;
 }
 
 .footer__nav_external {
@@ -59,14 +65,26 @@
     cursor: pointer;
 }
 
+@media screen and (max-width: 920px){
+    .footer {
+        max-height: 64px;
+        padding: 0 40px;
+        margin: 0;
+    }
+    .footer__nav_link {
+        margin-right: 40px;
+    }
+}
+
 @media screen and (max-width: 690px){
     .footer {
         display: flex;
         flex-direction: column-reverse;
         justify-content: space-around;
         align-items: center;
-        margin: 30px 0;
+        margin: 20px 0 22px;
         padding: 0;
+        max-height: 176px;
     }
 
     .footer__nav_link-container {
@@ -98,7 +116,7 @@
     }
 
     .footer__copyright  {
-        margin: 38px 16px 22px;
+        margin: 38px 16px 0;
         text-align: left;
         align-self: flex-start;
     }

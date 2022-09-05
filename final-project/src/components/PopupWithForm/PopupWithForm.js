@@ -2,9 +2,14 @@ import React from "react";
 
 function PopupWithForm( props ) {
   const [isSigningIn, setIsSigningIn] = React.useState(true);
+  const [isEnabled, setIsEnabled] = React.useState(true);
 
   const toggleFormPurpose = () => {
     setIsSigningIn(!isSigningIn)
+  }
+
+  const enableButton = () => {
+    setIsEnabled(!isEnabled)
   }
 
     return (
@@ -26,7 +31,7 @@ function PopupWithForm( props ) {
                   <input id="password-input" type="password" name="password" placeholder="Password" className="form__input_type_password form__input" required minLength="8" />
                   <span id="password-input-error" className="form__error"></span>
                 </div>
-                <button type="submit" aria-label="save" className="form__button">Sign in</button>
+                <button type="submit" aria-label="save" className={`form__button ${isEnabled ? '' : 'form__button_disabled'}`}>Sign in</button>
               </fieldset>
             </form>
           </div>
@@ -50,7 +55,7 @@ function PopupWithForm( props ) {
                   <input id="username-input" type="username" name="username" placeholder="Username" className="form__input_type_username form__input" required minLength="8" />
                   <span id="username-input-error" className="form__error"></span>
                 </div>
-                <button type="submit" aria-label="save" className="form__button">Sign up</button>
+                <button type="submit" aria-label="save" className={`form__button ${isEnabled ? '' : 'form__button_disabled'}`}>Sign up</button>
               </fieldset>
             </form>
           </div>}

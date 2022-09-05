@@ -11,8 +11,8 @@ function Header( props ) {
   }
 
   return( 
-    <header className={`header ${pathname === '/saved-news' ? 'header_black' : ''} ${isHamburgerOpen ? 'header_sticky' : ''}`} >
-      <NavLink to="/" className={`header__logo ${pathname === '/saved-news' ? 'header__logo_black' : ''}`}>NewsExplorer</NavLink>
+    <header className={`header ${pathname === '/saved-news' ? 'header-black' : ''} ${isHamburgerOpen ? 'header-sticky' : ''} ${isHamburgerOpen && pathname === '/saved-news' ? 'header-sticky_black' : ''}`} >
+      <NavLink to="/" className={`header__logo ${pathname === '/saved-news' ? 'header__logo-black' : ''}`}>NewsExplorer</NavLink>
       <Navigation handleHamburgerClick={handleHamburgerClick} isHamburgerOpen={isHamburgerOpen} login={props.login} />
     </header>
   ) 

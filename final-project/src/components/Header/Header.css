@@ -5,7 +5,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     max-height: 80px;
-    max-width: 100%;
+    max-width: 1440px;
     color: white;
     border-bottom: 1px solid #FFFFFF;
     border-color: white;
@@ -18,7 +18,7 @@
     transition: 0.1s linear 0.2s;
 }
 
-.header_black {
+.header-black {
     color: black;
     border-color: black;
     background-color: white;
@@ -27,7 +27,7 @@
 
 .header__logo {
     transition: 0.1s linear 0.1s;
-    font-family: Roboto Slab;
+    font-family: 'roboto-slab';
     font-size: 20px;
     font-weight: 700;
     line-height: 1.25;
@@ -36,7 +36,7 @@
     align-self: center;
 }
 
-.header__logo_black {
+.header__logo-black {
     color: black;
 }
 
@@ -47,7 +47,7 @@
 
 @media screen and (max-width: 920px){
     .header{
-        padding: 19px 40px 0;
+        padding: 14px 40px 0;
     }
 }
 
@@ -56,11 +56,16 @@
         align-items: center;
         padding: 16px;
         position: sticky;
+        height: 24px;
     }
 
-    .header_sticky {
+    .header-sticky {
         background-image: none;
         background-color: black;
+    }
+
+    .header-sticky_black {
+        background-color: white;
     }
 
     .header__logo {
