@@ -21,13 +21,13 @@ function PopupWithForm( props ) {
             <form name="login" className="form">
               <h2 className="form__title">Sign in</h2>
               <fieldset className="form__fieldset">
-                <div className="form__input_container">
-                  <p id="password-input-error" className="form__input_title">Email</p>
+                <div className="input__container">
+                  <p id="password-input-error" className="input__title">Email</p>
                   <input id="email-input" type="email" name="email" placeholder="Email" className="form__input_type_email form__input" required />
                   <span id="email-input-error" className="form__error"></span>
                 </div>
-                <div className="form__input_container">
-                  <p id="password-input-error" className="form__input_title">Password</p>
+                <div className="input__container">
+                  <p id="password-input-error" className="input__title">Password</p>
                   <input id="password-input" type="password" name="password" placeholder="Password" className="form__input_type_password form__input" required minLength="8" />
                   <span id="password-input-error" className="form__error"></span>
                 </div>
@@ -40,18 +40,18 @@ function PopupWithForm( props ) {
             <form name="login" className="form">
               <h2 className="form__title">Sign up</h2>
               <fieldset className="form__fieldset">
-                <div className="form__input_container">
-                  <p id="password-input-error" className="form__input_title">Email</p>
+                <div className="input__container">
+                  <p id="password-input-error" className="input__title">Email</p>
                   <input id="email-input" type="email" name="email" placeholder="Email" className="form__input_type_email form__input" required />
                   <span id="email-input-error" className="form__error"></span>
                 </div>
-                <div className="form__input_container">
-                  <p id="password-input-error" className="form__input_title">Password</p>
+                <div className="input__container">
+                  <p id="password-input-error" className="input__title">Password</p>
                   <input id="password-input" type="password" name="password" placeholder="Password" className="form__input_type_password form__input" required minLength="8" />
                   <span id="password-input-error" className="form__error"></span>
                 </div>
-                <div className="form__input_container">
-                  <p id="username-input-error" className="form__input_title">Username</p>
+                <div className="input__container">
+                  <p id="username-input-error" className="input__title">Username</p>
                   <input id="username-input" type="username" name="username" placeholder="Username" className="form__input_type_username form__input" required minLength="8" />
                   <span id="username-input-error" className="form__error"></span>
                 </div>

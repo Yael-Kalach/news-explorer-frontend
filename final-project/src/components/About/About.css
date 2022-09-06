@@ -27,7 +27,7 @@
 }
 
 .about__title {
-    font-family: 'roboto-slab';
+    font-family: 'roboto-slab', 'inter', Arial, sans-serif;
     font-size: 40px;
     font-weight: 400;
     line-height: 1.15;
@@ -35,7 +35,7 @@
 }
 
 .about__text {
-    font-family: 'roboto';
+    font-family: 'roboto', 'inter', Arial, sans-serif;
     font-size: 18px;
     font-weight: 400;
     line-height: 1.3;

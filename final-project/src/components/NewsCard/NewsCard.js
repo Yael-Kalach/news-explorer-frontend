@@ -17,7 +17,7 @@ function NewsCard({ image, title, keyword, date, description, source }) {
 
     return(
       <article className="news-card">
-        <div className="news-card_top">
+        <div className="news-card__top">
           <p className="news-card__keyword">{keyword}</p>
           <div className="news-card__icon">
             <p className="news-card__tooltip">{pathname === '/saved-news' ? "Remove from saved" : "Save article"}</p>
@@ -26,7 +26,7 @@ function NewsCard({ image, title, keyword, date, description, source }) {
           </div>
         </div>
         <img className="news-card__image" src={image} alt={title} />
-        <div className="news-card_bottom">
+        <div className="news-card__bottom">
           <p className="news-card__date">{date}</p>
           <h2 className="news-card__title">{title}</h2>
           <p className="news-card__text">{description}</p>

@@ -18,7 +18,7 @@
     transition: 0.1s linear 0.2s;
 }
 
-.header-black {
+.header_theme_black {
     color: black;
     border-color: black;
     background-color: white;
@@ -27,7 +27,7 @@
 
 .header__logo {
     transition: 0.1s linear 0.1s;
-    font-family: 'roboto-slab';
+    font-family: 'roboto-slab', 'inter', Arial, sans-serif;
     font-size: 20px;
     font-weight: 700;
     line-height: 1.25;
@@ -64,7 +64,7 @@
         background-color: #1A1B22;
     }
 
-    .header-sticky-black  {
+    .header-sticky_theme_black {
         background-color: white;
     }
 
