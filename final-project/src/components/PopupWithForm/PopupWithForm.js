@@ -17,7 +17,7 @@ function PopupWithForm( props ) {
         <div className="popup-with-form__container">
         <button type="button" aria-label="close" className="popup-with-form__close-button" onClick={props.onClose}></button>
           {isSigningIn ? 
-          <div className="popup-with-form_login">
+          <div className="popup-with-form-login">
             <form name="login" className="form">
               <h2 className="form__title">Sign in</h2>
               <fieldset className="form__fieldset">
@@ -36,7 +36,7 @@ function PopupWithForm( props ) {
             </form>
           </div>
           :
-          <div className="popup-with-form_signup">
+          <div className="popup-with-form-signup">
             <form name="login" className="form">
               <h2 className="form__title">Sign up</h2>
               <fieldset className="form__fieldset">
@@ -59,7 +59,7 @@ function PopupWithForm( props ) {
               </fieldset>
             </form>
           </div>}
-          <p className="form__switch">or<button className="form__switch_link" onClick={toggleFormPurpose}>{isSigningIn ? 'Sign up' : 'Sign in'}</button></p>
+          <p className="form__switch">or<button className="form__switch-link" onClick={toggleFormPurpose}>{isSigningIn ? 'Sign up' : 'Sign in'}</button></p>
         </div>
       </div>
     );

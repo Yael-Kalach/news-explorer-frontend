@@ -7,15 +7,15 @@ function Navigation( props ) {
   
     return (
       <nav className="nav">
-        <ul className={`nav__menu ${props.isHamburgerOpen ? 'nav__menu_active' : ''} ${pathname === '/saved-news' ? 'nav__menu_black' : ''}`}>
+        <ul className={`nav__menu ${props.isHamburgerOpen ? 'nav__menu_active' : ''} ${pathname === '/saved-news' ? 'nav__menu-black ' : ''}`}>
           <li className="nav__menu_item">
-            <NavLink to="/" className={`nav__link ${pathname === '/saved-news' ? 'nav__link_black' : 'nav__link_marked-white'}`}>Home</NavLink>
+            <NavLink to="/" className={`nav__link ${pathname === '/saved-news' ? 'nav__link-black ' : 'nav__link_marked-white'}`}>Home</NavLink>
           </li>
           <li className="nav__menu_item">
-            <NavLink to="/saved-news" className={`nav__link ${pathname === '/saved-news' ? 'nav__link_black nav__link_marked-black' : ''}`}>Saved articles</NavLink>
+            <NavLink to="/saved-news" className={`nav__link ${pathname === '/saved-news' ? 'nav__link-black  nav__link_marked-black' : ''}`}>Saved articles</NavLink>
           </li>
           <li className="nav__menu_item">
-            <button onClick={props.login} className={`nav__link_login ${pathname === '/saved-news' ? 'nav__login_black' : ''}`}>
+            <button onClick={props.login} className={`nav__link-login ${pathname === '/saved-news' ? 'nav__login-black ' : ''}`}>
             {pathname === '/' ? 'Sign in' : 'Elise'}
             {pathname === '/' ? '' : <img alt='Logout icon' classname='nav__link_logout-icon' src={Union} />}
             </button>
@@ -23,8 +23,8 @@ function Navigation( props ) {
           <div className={`nav__overlay ${props.isHamburgerOpen ? 'nav__overlay_active' : ''}`} onClick={props.handleHamburgerClick} />
         </ul>
         <div className={`hamburger ${props.isHamburgerOpen ? 'hamburger_active' : ''}`} onClick={props.handleHamburgerClick}>
-          <span className={`hamburger__bar ${pathname === '/saved-news' ? 'hamburger__bar_black' : ''}`}></span>
-          <span className={`hamburger__bar ${pathname === '/saved-news' ? 'hamburger__bar_black' : ''}`}></span>
+          <span className={`hamburger__bar ${pathname === '/saved-news' ? 'hamburger__bar-black ' : ''}`}></span>
+          <span className={`hamburger__bar ${pathname === '/saved-news' ? 'hamburger__bar-black ' : ''}`}></span>
         </div>
       </nav>
     );

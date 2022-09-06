@@ -3,10 +3,10 @@ import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
 
 function SavedNews(props) {
     return (
-      <main className="saved-news">
+      <div className="saved-news">
         <SavedNewsHeader />
         <NewsCardList />
-      </main>
+      </div>
     );
   }
   

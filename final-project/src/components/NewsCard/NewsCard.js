@@ -7,8 +7,8 @@ function NewsCard({ image, title, keyword, date, description, source }) {
 
   const cardLikeButtonClassName = (
     `news-card__button 
-    ${pathname === '/saved-news' ? 'news-card__button_trash' : 'news-card__button_bookmark'}
-    ${pathname === '/' && isMarked ? 'news-card__button_bookmarked' : ''}`
+    ${pathname === '/saved-news' ? 'news-card__button_trash' : 'news-card__button-bookmark'}
+    ${pathname === '/' && isMarked ? 'news-card__button-bookmarked' : ''}`
   );
 
   const handleBookmark = () => {

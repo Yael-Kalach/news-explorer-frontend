@@ -26,7 +26,7 @@
     transition: 0.1s linear 0.2s;
 }
 
-.nav__link_login {
+.nav__link-login {
     height: 48px;
     margin-bottom: 5px;
     border-radius: 100px;
@@ -37,7 +37,7 @@
     transition: 0.1s linear 0.1s;
 }
 
-.nav__link_black {
+.nav__link-black  {
     font-family: 'roboto';
     color: black;
 }
@@ -53,7 +53,7 @@
     padding: 29px 10px;
 }
 
-.nav__login_black {
+.nav__login-black  {
     background: none;
     padding: 12px 19px;
     color: black;
@@ -67,7 +67,7 @@
     align-items: center;
 }
 
-.nav__link_login:hover {
+.nav__link-login:hover {
     opacity: 0.7;
 }
 
@@ -114,7 +114,7 @@
     background-color: #FFFFFF;
 }
 
-.hamburger__bar_black {
+.hamburger__bar-black  {
     background-color: #000;
 }
 
@@ -168,14 +168,14 @@
         width: 100%;
         text-align: left;
         transition: 0.3s;
-        background-color: #000;
+        background-color: #1A1B22;
     }
 
-    .nav__link_login {
+    .nav__link-login {
         width: 285px;
     }
 
-    .nav__login_black {
+    .nav__login-black  {
         padding: 12px 19px;
         display: flex;
         gap: 10px;
@@ -188,7 +188,7 @@
         top: 303px;
     }
 
-    .nav__menu_black{
+    .nav__menu-black {
         background-color: #FFFFFF;
         color: #000;
     }
