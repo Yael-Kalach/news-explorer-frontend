@@ -76,11 +76,11 @@
     flex-direction: column;
 }
 
-.input__container {
+.form__input-container {
     margin-bottom: 30px;
 }
 
-.input__title {
+.form__input-title {
     font-family: 'inter', Arial, sans-serif;
     font-size: 12px;
     font-weight: 400;

@@ -31,7 +31,7 @@
     line-height: 24px;
     letter-spacing: 0px;
     text-align: center;
-    margin-right: 64px;
+    margin-right: 40px;
     align-self: center;
     color: black;
     text-decoration: none;
@@ -74,9 +74,6 @@
     }
     .footer__nav-link {
         margin-right: 40px;
-    }
-    .footer__nav-link:nth-child(2) {
-        margin-right: 0;
     }
 }
 

@@ -65,7 +65,7 @@
 }
 
 .news-card__keyword {
-    font-family: 'roboto';
+    font-family: 'roboto', 'inter', Arial, sans-serif;
     font-size: 14px;
     font-weight: 500;
     line-height: 1.7;
@@ -76,29 +76,29 @@
     margin-left: 24px;
 }
 
-.news-card__button_trash {
+.news-card__button_type_trash {
     background-image: url('../../images/icons/Delete/normal.svg');
     transition: 0.2s linear 0.1s;
 }
 
-.news-card__button_trash:hover {
+.news-card__button_type_trash:hover {
     background-image: url('../../images/icons/Delete/hover.svg');
 }
 
-.news-card__button-bookmark {
+.news-card__button_type_bookmark {
     background-image: url('../../images/icons/Bookmark/Regular.svg');
     transition: 0.2s linear 0.1s;
 }
 
-.news-card__button-bookmark:hover {
+.news-card__button_type_bookmark:hover {
     background-image: url('../../images/icons/Bookmark/Hover.svg');
 }
 
-.news-card__button-bookmarked {
+.news-card__button_type_bookmarked {
     background-image: url('../../images/icons/Bookmark/marked.svg');
 }
 
-.news-card__button-bookmarked:hover {
+.news-card__button_type_bookmarked:hover {
     background-image: url('../../images/icons/Bookmark/marked.svg');
 }
 
