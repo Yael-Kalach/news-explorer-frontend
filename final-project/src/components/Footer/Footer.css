@@ -1,0 +1,124 @@
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-height: 80px;
+    max-width: 100%;
+    margin: 0;
+    padding: 30px 104px 26px;
+    align-items: center;
+}
+
+.footer__copyright {
+    font-family: 'roboto', 'inter', Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0px;
+    text-align: left;
+    color: #B6BCBF;
+}
+
+.footer__nav {
+    display: flex;
+    flex-direction: row;
+}
+
+.footer__nav-link {
+    font-family: 'roboto', 'inter', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0px;
+    text-align: center;
+    margin-right: 40px;
+    align-self: center;
+    color: black;
+    text-decoration: none;
+    background: none;
+    border: none;
+    border-color: #FFFFFF;
+}
+
+.nav__external {
+    background-position: center;
+    background-size: cover;
+    background-color: white;
+    margin-left: 28px;
+}
+
+.nav__external:nth-child(1) {
+    margin-left: 0;
+}
+
+.nav__external-icon {
+    height: 20px;
+    width: 20px;
+}
+
+.nav__external:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.footer__nav-link:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 920px){
+    .footer {
+        max-height: 64px;
+        padding: 0 40px;
+        margin: 0;
+    }
+    .footer__nav-link {
+        margin-right: 40px;
+    }
+}
+
+@media screen and (max-width: 690px){
+    .footer {
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: space-around;
+        align-items: center;
+        margin: 20px 0 22px;
+        padding: 0;
+        max-height: 176px;
+    }
+
+    .footer__nav-link-container {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        height: 72px;
+        justify-content: space-between;
+    }
+
+    .footer__nav {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .nav__external:nth-child(2) {
+        margin-right: 16px;
+    }
+
+    .footer__nav-link {
+        text-align: left;
+        align-self: flex-start;
+        color: black;
+        text-decoration: none;
+        background: none;
+        border: none;
+        border-color: #FFFFFF;
+        margin-left: 16px;
+    }
+
+    .footer__copyright  {
+        margin: 38px 16px 0;
+        text-align: left;
+        align-self: flex-start;
+    }
+}
