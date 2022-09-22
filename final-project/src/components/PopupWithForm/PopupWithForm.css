@@ -144,9 +144,11 @@
     background: #E6E8EB;
     box-shadow: 0;
     color: #B6BCBF;
+    pointer-events: none
 }
 
 .form__button_disabled:hover {
+    background: #E6E8EB;
     cursor: default;
 }
 
