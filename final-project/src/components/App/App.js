@@ -6,9 +6,10 @@ import SavedNews from '../SavedNews/SavedNews';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import Preloader from '../Preloader/Preloader';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
-// import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { register, signIn, checkToken } from '../../utils/auth'
+import api from '../../utils/api';
 
 function App() {
   const navigate = useNavigate();
@@ -16,6 +17,12 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   // popup states
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [values, setValues] = React.useState({
+    email: '',
+    password: '',
+    name: '',
+  });
+
   // user and registration states
   const [currentUser, setCurrentUser] = React.useState({});
   const [isLoggedIn, setIsLoggedIn] = React.useState(false)
@@ -37,9 +44,33 @@ function App() {
     setIsPopupOpen(false);
   }
 
+  React.useEffect(() => {
+    const closeByEscape = (event) => {
+      if (event.key === 'Escape') {
+        closeAllPopups();
+      }
+    };
+    document.addEventListener('keydown', closeByEscape);
+    return () => document.removeEventListener('keydown', closeByEscape);
+  }, []);
+
+  // User info
+  function setcurrentUserInfo() {
+    api.getUserInformation()
+      .then((res) => {
+        if (res && res.user) {
+          localStorage.setItem('name', res.user.name);
+          setCurrentUser({ ...currentUser, ...res.user });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   // registration related handlers
-  function handleRegistration(password, email, username) {
-    register(password, email, username)
+  function handleRegistration( password, email, username ) {
+    register( password, email, username )
       .then((res) => {
         console.log(res)
       })
@@ -56,15 +87,17 @@ function App() {
       })
   }
 
-  function handleLogin(password, email) {
-    signIn(password, email)
+  function handleLogin( password, email ) {
+    signIn( password, email )
       .then((response) => {
-          localStorage.setItem("jwt", response.token);
-          setCurrentUser({ ...currentUser, data: { email: email } });
+        if (response && response.token) {
+          localStorage.setItem('jwt', response.token);
           setIsLoggedIn(true);
-          navigate('/saved-news');
-          console.log(response);
-          console.log(`Logged in successfully: ${currentUser}`);
+          setcurrentUserInfo();
+          setIsPopupOpen(false);
+        } else {
+          throw new Error('No token recieved');
+        }
       })
       .catch((err) => {
         if (err.status === 400) {
@@ -77,9 +110,10 @@ function App() {
 
   function handleLogout() {
     setIsLoggedIn(false);
-    setCurrentUser({});
     localStorage.removeItem("jwt");
-    console.log(`Logged out successfully: ${localStorage}`);
+    localStorage.removeItem("name");
+    setValues(null);
+    setCurrentUser({});
   }
   // Token mounting
   React.useEffect(() => {
@@ -89,16 +123,22 @@ function App() {
         .then((res) => {
           if (res) {
             setIsLoggedIn(true);
-            setCurrentUser(res);
-            console.log(res)
           }
-          console.log(res)
-          navigate("/");
         })
         .catch((err) => {
           console.log(err);
+          setIsLoggedIn(false);
         });
   }, []);
+
+  // Articles functionality
+
+  const getSavedArticles = async () => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      return await api.getSavedArticles();
+    }
+  };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -109,16 +149,31 @@ function App() {
           :
             ''
         }
-        <Header login={handleLoginClick} />
+        <Header 
+          handleLogout={handleLogout} 
+          isLoggedIn={isLoggedIn} 
+          handleLoginClick={handleLoginClick} 
+          name={currentUser.name}
+        />
         <main className="content">
           <Routes>
+            <Route
+              isLoggedIn={isLoggedIn}
+              path='/saved-news'
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <SavedNews 
+                    getSavedArticles={getSavedArticles} 
+                  />
+                </ProtectedRoute>
+              }
+            />
             <Route exact path='/' element={<Main />} />
-            <Route exact path='/saved-news' element={<SavedNews />} />
           </Routes>
           <PopupWithForm 
             isOpen={isPopupOpen} 
-            handleSubmitSignIn={handleLogin} 
-            handleSubmitSignUp={handleRegistration} 
+            onSubmitSignIn={handleLogin} 
+            onSubmitSignUp={handleRegistration} 
             onClose={closeAllPopups} />
         </main>
         <Footer />

@@ -32,4 +32,6 @@
 
 @import url(./components/SearchForm/SearchForm.css);
 
+@import url(./components/SearchResults/SearchResults.css);
+
 @import url(./components/Footer/Footer.css);

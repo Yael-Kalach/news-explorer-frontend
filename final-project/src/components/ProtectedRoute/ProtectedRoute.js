@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 const ProtectedRoute = ({ children, loggedIn, ...props }) => {
   return (
         
-  loggedIn ? [ children ] : <Navigate to="/" />
+  loggedIn ? [ children ] : <Navigate to="/saved-news" />
         
 )}
 

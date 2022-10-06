@@ -54,17 +54,31 @@
 }
 
 .nav__login_theme_black  {
-    background: none;
-    padding: 12px 19px;
     color: black;
     border: 1px solid black;
+}
+
+.nav__link-logout {
+    height: 48px;
+    margin-bottom: 5px;
+    border-radius: 100px;
+    padding: 12px 50px;
+    color: white;
+    border: 1px solid #FFFFFF;
     transition: 0.1s linear 0.1s;
+    background: none;
+    padding: 12px 19px;
     display: grid;
     grid-template-columns: 2fr 1fr;
     grid-gap: 19px;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
+}
+
+.nav__logout_theme_black {
+    color: black;
+    border: 1px solid black;
 }
 
 .nav__link-login:hover {

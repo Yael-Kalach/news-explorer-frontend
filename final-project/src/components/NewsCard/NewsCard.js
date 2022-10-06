@@ -1,9 +1,89 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import api from '../../utils/api';
 
-function NewsCard({ image, title, keyword, date, description, source }) {
+function NewsCard({ url, urlToImage, title, keyword, date, description, source, _id, handleUpdateList }) {
+  // news card states
   const [isMarked, setIsMarked] = React.useState(false);
+  const [currentId, setCurrentId] = React.useState(_id);
+
   const { pathname } = useLocation();
+
+  function formatDate(date) {
+    const dateArr = date.toString().slice(0, 10).split('-', 3);
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    dateArr[1] = monthNames[parseInt(dateArr[1]) - 1];
+    return `${dateArr[1]} ${dateArr[2]}, ${dateArr[0]}`;
+  }
+
+  function handleDelete(event) {
+    setIsMarked(true);
+    const isLoggedIn = localStorage.getItem('jwt') !== null;
+    if (isLoggedIn && pathname === '/saved-news' && isMarked === false) {
+      api.deleteArticle(event.currentTarget.parentNode.id)
+        .then((res) => {
+          const savedArticles = JSON.parse(
+            localStorage.getItem('savedArticles')
+          );
+
+          const updatedSavedArticles = savedArticles.filter(
+            (obj) => obj._id !== currentId
+          );
+          handleUpdateList(updatedSavedArticles);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+  const saveArticle = async (articleData) => {
+    return await api.saveArticles(articleData);
+  };
+
+  function handleCardSave(event) {
+    const isLoggedIn = localStorage.getItem('jwt') !== null;
+    if (isLoggedIn && pathname === '/' && isMarked === false) {
+      console.log('saving articles');
+      const articleData = {
+        keyword: localStorage.getItem('currentKeyword'),
+        title: title,
+        text: description,
+        date: date,
+        source: source,
+        link: url,
+        image: urlToImage,
+      };
+      saveArticle(articleData).then((newArticle) => {
+        setIsMarked(true);
+        setCurrentId(newArticle.data._id);
+      });
+    } else if (isLoggedIn && pathname === '/' && isMarked === true) {
+      console.log('calling delete article');
+      api
+        .deleteArticle(event.currentTarget.parentNode.id)
+        .then((res) => {
+          console.log(`deletingArticle = ${currentId}`);
+          setIsMarked(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
 
   const cardLikeButtonClassName = (
     `news-card__button 
@@ -11,23 +91,19 @@ function NewsCard({ image, title, keyword, date, description, source }) {
     ${pathname === '/' && isMarked ? 'news-card__button_type_bookmarked' : ''}`
   );
 
-  const handleBookmark = () => {
-    setIsMarked(!isMarked)
-  }
-
     return(
       <article className="news-card">
         <div className="news-card__top">
           <p className="news-card__keyword">{keyword}</p>
           <div className="news-card__icon">
             <p className="news-card__tooltip">{pathname === '/saved-news' ? "Remove from saved" : "Save article"}</p>
-            <button type="button" aria-label={pathname === '/saved-news' ? "trash" : "bookmark"}
-            className={cardLikeButtonClassName} onClick={handleBookmark} />
+            {pathname === '/' ? <button type="button" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleCardSave} /> 
+            : <button type="trash" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleDelete} />}
           </div>
         </div>
-        <img className="news-card__image" src={image} alt={title} />
+        <img className="news-card__image" src={urlToImage} alt={title} />
         <div className="news-card__bottom">
-          <p className="news-card__date">{date}</p>
+          <p className="news-card__date">{formatDate(date)}</p>
           <h2 className="news-card__title">{title}</h2>
           <p className="news-card__text">{description}</p>
           <p className="news-card__source">{source}</p>

@@ -1,11 +1,11 @@
 import SearchForm from '../SearchForm/SearchForm.js'
 import About from '../About/About.js'
 
-function Main() {
+function Main({ resultSearch, handleShowMore }) {
     return (
       <div className="main">
         <div>
-          <SearchForm />
+          <SearchForm resultSearch={resultSearch} handleShowMore={handleShowMore} />
           <About />
         </div>
       </div>

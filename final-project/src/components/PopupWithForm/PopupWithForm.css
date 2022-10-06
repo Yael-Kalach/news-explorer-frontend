@@ -64,6 +64,7 @@
     font-weight: 900;
     line-height: 1.16;
     height: 32px;
+    max-width: 320px;
     margin: 0 0 22px;
 }
 
@@ -172,6 +173,12 @@
     background: none;
     cursor: pointer;
     padding: 5px;
+}
+
+.form__switch-link-tooltip {
+    justify-self: flex-start;
+    text-align: left;
+    margin-top: 10px;
 }
 
 @media screen and (max-width: 520px){

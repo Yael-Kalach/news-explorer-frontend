@@ -1,10 +1,12 @@
 import React from 'react';
 
 class Api extends React.Component {
-    constructor({baseUrl, headers}) {
-        this._baseUrl = baseUrl
-        this._headers = headers
-    }
+  constructor(props) {
+    super(props);
+    const headers = props.headers;
+    this._baseUrl = props.baseUrl;
+    this._headers = headers;
+  }
 
     _checkResponse(res) {
         if (res.ok) {
