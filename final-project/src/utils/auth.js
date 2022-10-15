@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.yaelkalach.students.nomoredomainssbs.ru';
+export const BASE_URL = 'https://api.yaelk.students.nomoredomainssbs.ru';
 
 const checkResponse = (res) => {
   if (res.ok) {
@@ -7,39 +7,55 @@ const checkResponse = (res) => {
   return Promise.reject(`Error ${res.status}`);
 }
 
-export const register = ({ password, email, username }) => {
-    return fetch(`${BASE_URL}/signup`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ password, email, username })
-    })
-    .then(res => {return checkResponse(res)})
-  };
-
-export const signIn = ({ password, email }) => {
-  return fetch(`${BASE_URL}/signin`, {
+export const register = ( user ) => {
+  console.log(user)
+  return fetch (`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
     },
-    body: JSON.stringify({ password, email })
+    body: JSON.stringify({
+      email: user.email,
+      password: user.password,
+      name: user.name,
+    }),
   })
-  .then(res => {
-    console.log("res: ", res)
-    return checkResponse(res)})
+  .then(res => {return checkResponse(res)})
+};
+
+export const signIn = (user) => {
+  return fetch (`${BASE_URL}/signin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify({
+      email: user.email,
+      password: user.password,
+    }),
+  })
+    .then(checkResponse)
+    .then((res) => {
+      if (res.token) {
+        localStorage.setItem('jwt', res.token);
+        localStorage.setItem('name', user.name);
+        return res;
+      } else {
+        return;
+      }
+    });
 };
 
 export const checkToken = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
+  return fetch (`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
+      'Access-Control-Allow-Origin': '*',
     }
   })
   .then(res => {return checkResponse(res)})

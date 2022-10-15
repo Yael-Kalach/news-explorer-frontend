@@ -115,11 +115,6 @@
     text-align: left;
     color: #FF0000;
     margin: 5px 0 13px;
-    visibility: hidden;
-}
-
-.form__error_visible{
-    visibility: visible;
 }
 
 .form__button {

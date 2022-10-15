@@ -3,7 +3,7 @@ import { useLocation, NavLink } from 'react-router-dom';
 import Union from '../../images/icons/Logout/Union.svg'
 import UnionWhite from '../../images/icons/Logout/Union-white.svg'
 
-function Navigation({ isHamburgerOpen, isLoggedIn, handleLogout, handleLoginClick, handleHamburgerClick }) {
+function Navigation({ isHamburgerOpen, isLoggedIn, handleLogout, handleLoginClick, handleHamburgerClick, username }) {
   const { pathname } = useLocation();
   
     return (
@@ -21,7 +21,7 @@ function Navigation({ isHamburgerOpen, isLoggedIn, handleLogout, handleLoginClic
             { isLoggedIn ? 
               <button onClick={handleLogout} className={`nav__link-logout ${pathname === '/saved-news' ? 'nav__logout_theme_black ' : ''}`}>
                 {localStorage.getItem('name')}
-                <img alt='Logout icon' className='nav__link-logout_icon' src={pathname === '/saved-news' ? UnionWhite : Union} />
+                <img alt='Logout icon' className='nav__link-logout_icon' src={pathname === '/saved-news' ? Union : UnionWhite} />
               </button>
             :
               <button onClick={handleLoginClick} className={`nav__link-login ${pathname === '/saved-news' ? 'nav__login_theme_black ' : ''}`}>
@@ -29,7 +29,7 @@ function Navigation({ isHamburgerOpen, isLoggedIn, handleLogout, handleLoginClic
               </button>
             }
           </li>
-          <div className={`nav__overlay ${isHamburgerOpen ? 'nav__overlay_active' : ''}`} onClick={handleHamburgerClick} />
+          <div className={`nav__overlay ${isHamburgerOpen ? 'nav__overlay_active' : ''} ${isLoggedIn ? '' : 'nav__overlay_active-loggedIn'}`} onClick={handleHamburgerClick} />
         </ul>
         <div className={`hamburger ${isHamburgerOpen ? 'hamburger_active' : ''}`} onClick={handleHamburgerClick}>
           <span className={`hamburger__bar ${pathname === '/saved-news' ? 'hamburger__bar_theme_black' : ''}`}></span>

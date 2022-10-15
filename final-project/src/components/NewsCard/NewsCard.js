@@ -1,8 +1,19 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import api from '../../utils/api';
+import api from '../../utils/MainApi';
 
-function NewsCard({ url, urlToImage, title, keyword, date, description, source, _id, handleUpdateList }) {
+function NewsCard({ 
+  cardKeyword, 
+  cardTitle, 
+  cardDescription, 
+  cardPublishedAt, 
+  cardSource, 
+  cardUrl, 
+  cardUrlToImage, 
+  _id, 
+  handleUpdateList,
+  isLoggedIn
+  }) {
   // news card states
   const [isMarked, setIsMarked] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(_id);
@@ -55,23 +66,22 @@ function NewsCard({ url, urlToImage, title, keyword, date, description, source, 
   };
 
   function handleCardSave(event) {
-    const isLoggedIn = localStorage.getItem('jwt') !== null;
-    if (isLoggedIn && pathname === '/' && isMarked === false) {
-      console.log('saving articles');
+    const userLoggedIn = localStorage.getItem('jwt') !== null;
+    if (userLoggedIn && pathname === '/' && isMarked === false) {
       const articleData = {
         keyword: localStorage.getItem('currentKeyword'),
-        title: title,
-        text: description,
-        date: date,
-        source: source,
-        link: url,
-        image: urlToImage,
+        title: cardTitle,
+        text: cardDescription,
+        date: cardPublishedAt,
+        source: cardSource,
+        link: cardUrl,
+        image: cardUrlToImage,
       };
       saveArticle(articleData).then((newArticle) => {
         setIsMarked(true);
         setCurrentId(newArticle.data._id);
       });
-    } else if (isLoggedIn && pathname === '/' && isMarked === true) {
+    } else if (userLoggedIn && pathname === '/' && isMarked === true) {
       console.log('calling delete article');
       api
         .deleteArticle(event.currentTarget.parentNode.id)
@@ -94,19 +104,19 @@ function NewsCard({ url, urlToImage, title, keyword, date, description, source, 
     return(
       <article className="news-card">
         <div className="news-card__top">
-          <p className="news-card__keyword">{keyword}</p>
+          <p className="news-card__keyword">{cardKeyword}</p>
           <div className="news-card__icon">
-            <p className="news-card__tooltip">{pathname === '/saved-news' ? "Remove from saved" : "Save article"}</p>
+            <p className="news-card__tooltip">{isLoggedIn && pathname === "/" ? "Save article" : "Remove from saved"}</p>
             {pathname === '/' ? <button type="button" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleCardSave} /> 
             : <button type="trash" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleDelete} />}
           </div>
         </div>
-        <img className="news-card__image" src={urlToImage} alt={title} />
+        <img className="news-card__image" src={cardUrlToImage} alt={cardTitle} />
         <div className="news-card__bottom">
-          <p className="news-card__date">{formatDate(date)}</p>
-          <h2 className="news-card__title">{title}</h2>
-          <p className="news-card__text">{description}</p>
-          <p className="news-card__source">{source}</p>
+          <p className="news-card__date">{formatDate(cardPublishedAt)}</p>
+          <h2 className="news-card__title">{cardTitle}</h2>
+          <p className="news-card__text">{cardDescription}</p>
+          <p className="news-card__source">{cardSource}</p>
         </div>
       </article>
     )

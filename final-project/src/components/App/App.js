@@ -1,48 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import SavedNews from '../SavedNews/SavedNews';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import Preloader from '../Preloader/Preloader';
-import {CurrentUserContext} from '../../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { register, signIn, checkToken } from '../../utils/auth'
-import api from '../../utils/api';
+import RegistrationPopup from '../RegistrationPopup/RegistrationPopup'
+import LoginPopup from '../LoginPopup/LoginPopup';
+import TooltipPopup from '../TooltipPopup/TooltipPopup';
+import api from '../../utils/MainApi';
 
 function App() {
-  const navigate = useNavigate();
   // loading states
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = React.useState(false);
   // popup states
-  const [isPopupOpen, setIsPopupOpen] = useState(false)
-  const [values, setValues] = React.useState({
-    email: '',
-    password: '',
-    name: '',
-  });
-
+  const [isRegistrationPopupOpen, setIsRegistrationPopupOpen] = React.useState(false);
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
+  const [isTooltipPopupOpen, setIsTooltipPopupOpen] = React.useState(false);
   // user and registration states
   const [currentUser, setCurrentUser] = React.useState({});
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   // preloader mounting
-  useEffect(() => {
+  React.useEffect(() => {
     setIsLoading(true)
     setTimeout(() => {
       setIsLoading(false)
     }, 1000)
-  }, [])
+  }, []);
 
   // popup functions
-  function handleLoginClick() {
-    setIsPopupOpen(!isPopupOpen)
-  }
+
+  function handleLoginPopupClick() {
+    setIsLoginPopupOpen(!isLoginPopupOpen);
+  };
 
   function closeAllPopups(){
-    setIsPopupOpen(false);
-  }
+    setIsRegistrationPopupOpen(false);
+    setIsLoginPopupOpen(false);
+    setIsTooltipPopupOpen(false);
+  };
+
+  const togglePopupPurpose = () => {
+    setIsLoginPopupOpen(!isLoginPopupOpen);
+    setIsRegistrationPopupOpen(!isRegistrationPopupOpen);
+  };
+
+  function handleRedircetLogin(event) {
+    closeAllPopups();
+    setIsLoginPopupOpen(true);
+  };
 
   React.useEffect(() => {
     const closeByEscape = (event) => {
@@ -69,32 +80,36 @@ function App() {
   }
 
   // registration related handlers
-  function handleRegistration( password, email, username ) {
-    register( password, email, username )
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        if (err.status === 400) {
-          console.log('400 - one of the fields was filled incorrectly');
-        } 
-        if (err.status === 401) {
-          console.log("401 - the user with the specified email not found");
-        }
-        else {
-          console.log(`Something is not working... Error: ${err}`);
-        }
-      })
-  }
+  function handleRegistration({ email, password, name }) {
+    console.log({ email, password, name })
+    register({ email, password, name })
+    .then((res) => {
+      setIsTooltipPopupOpen(true);
+    })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      if (err.status === 400) {
+        console.log('400 - one of the fields was filled incorrectly');
+      } 
+      if (err.status === 401) {
+        console.log("401 - the user with the specified email not found");
+      }
+      else {
+        console.log(`Something is not working... Error: ${err}`);
+      }
+    })
+  };
 
-  function handleLogin( password, email ) {
-    signIn( password, email )
+  function handleLogin( email, password ) {
+    signIn( email, password )
       .then((response) => {
         if (response && response.token) {
           localStorage.setItem('jwt', response.token);
           setIsLoggedIn(true);
           setcurrentUserInfo();
-          setIsPopupOpen(false);
+          setIsLoginPopupOpen(false);
         } else {
           throw new Error('No token recieved');
         }
@@ -106,15 +121,15 @@ function App() {
             console.log(`Something is not working... Error: ${err}`);
           }
       })
-  }
+  };
 
   function handleLogout() {
     setIsLoggedIn(false);
     localStorage.removeItem("jwt");
     localStorage.removeItem("name");
-    setValues(null);
     setCurrentUser({});
-  }
+  };
+
   // Token mounting
   React.useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -132,7 +147,6 @@ function App() {
   }, []);
 
   // Articles functionality
-
   const getSavedArticles = async () => {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
@@ -152,8 +166,7 @@ function App() {
         <Header 
           handleLogout={handleLogout} 
           isLoggedIn={isLoggedIn} 
-          handleLoginClick={handleLoginClick} 
-          name={currentUser.name}
+          handleLoginClick={handleLoginPopupClick}
         />
         <main className="content">
           <Routes>
@@ -164,17 +177,30 @@ function App() {
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
                   <SavedNews 
                     getSavedArticles={getSavedArticles} 
+                    isLoggedIn={isLoggedIn}
                   />
                 </ProtectedRoute>
               }
             />
-            <Route exact path='/' element={<Main />} />
+            <Route exact path='/' element={<Main isLoggedIn={isLoggedIn} />} />
           </Routes>
-          <PopupWithForm 
-            isOpen={isPopupOpen} 
-            onSubmitSignIn={handleLogin} 
+          <RegistrationPopup 
+            isOpen={isRegistrationPopupOpen}
             onSubmitSignUp={handleRegistration} 
-            onClose={closeAllPopups} />
+            onClose={closeAllPopups}
+            toggleFormPurpose={togglePopupPurpose}
+            />
+          <LoginPopup 
+            isOpen={isLoginPopupOpen}
+            onSubmitSignin={handleLogin} 
+            onClose={closeAllPopups}
+            toggleFormPurpose={togglePopupPurpose}
+            />
+          <TooltipPopup
+            isOpen={isTooltipPopupOpen}
+            onClose={closeAllPopups}
+            handleToolTipToggle={handleRedircetLogin}
+            />
         </main>
         <Footer />
       </div>

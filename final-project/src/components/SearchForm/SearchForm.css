@@ -92,15 +92,11 @@
 .search-results {
     padding: auto;
     background-color: #F5F6F7;
-    display: none;
-    transition: 0.2s linear 0.1s;
-    max-width: 100%;
-    align-items: center;
-}
-
-.search-results_visible {
     display: flex;
     margin: 0 auto 0;
+    align-items: center;
+    transition: 0.2s linear 0.1s;
+    max-width: 100%;
     align-items: center;
 }
 

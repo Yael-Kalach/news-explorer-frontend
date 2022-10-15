@@ -1,11 +1,13 @@
 import SearchForm from '../SearchForm/SearchForm.js'
 import About from '../About/About.js'
 
-function Main({ resultSearch, handleShowMore }) {
+function Main({ isLoggedIn }) {
+
+  
     return (
       <div className="main">
         <div>
-          <SearchForm resultSearch={resultSearch} handleShowMore={handleShowMore} />
+          <SearchForm isLoggedIn={isLoggedIn} />
           <About />
         </div>
       </div>

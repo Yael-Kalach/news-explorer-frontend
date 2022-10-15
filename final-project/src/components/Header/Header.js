@@ -1,7 +1,7 @@
 import React from 'react';
 import Navigation from '../Navigation/Navigation';
 import { useLocation, NavLink } from 'react-router-dom';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 
 function Header({ handleLogout, handleLoginClick, isLoggedIn }) {
   const { pathname } = useLocation();
@@ -21,7 +21,7 @@ function Header({ handleLogout, handleLoginClick, isLoggedIn }) {
         isHamburgerOpen={isHamburgerOpen} 
         handleLogout={handleLogout} 
         handleLoginClick={handleLoginClick}
-        name={currentUser.name} 
+        username={currentUser.name}
         />
     </header>
   ) 
