@@ -65,27 +65,10 @@ function App() {
     return () => document.removeEventListener('keydown', closeByEscape);
   }, []);
 
-  // User info
-  function setcurrentUserInfo() {
-    api.getUserInformation()
-      .then((res) => {
-        if (res && res.user) {
-          localStorage.setItem('name', res.user.name);
-          setCurrentUser({ ...currentUser, ...res.user });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   // registration related handlers
   function handleRegistration({ email, password, name }) {
     console.log({ email, password, name })
     register({ email, password, name })
-    .then((res) => {
-      setIsTooltipPopupOpen(true);
-    })
     .then((res) => {
       console.log(res)
     })
@@ -100,15 +83,18 @@ function App() {
         console.log(`Something is not working... Error: ${err}`);
       }
     })
+    .finally(() => {
+      setIsTooltipPopupOpen(true);
+    })
   };
 
   function handleLogin( email, password ) {
+    console.log( email, password )
     signIn( email, password )
       .then((response) => {
         if (response && response.token) {
           localStorage.setItem('jwt', response.token);
           setIsLoggedIn(true);
-          setcurrentUserInfo();
           setIsLoginPopupOpen(false);
         } else {
           throw new Error('No token recieved');
@@ -122,6 +108,18 @@ function App() {
           }
       })
   };
+
+  // User info
+  
+  React.useEffect(() => {
+    isLoggedIn &&
+    api.getUserInformation()
+      .then((userData) => {
+        localStorage.setItem('name', userData.name);
+        setCurrentUser({ ...currentUser, ...userData });
+      })
+      .catch(console.log)
+  }, [isLoggedIn])
 
   function handleLogout() {
     setIsLoggedIn(false);

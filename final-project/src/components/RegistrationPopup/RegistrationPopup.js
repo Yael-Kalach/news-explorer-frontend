@@ -4,7 +4,6 @@ import PopupWithForm from "../PopupWithForm/PopupWithForm";
 
 const RegistrationPopup = ({ isOpen, onClose, toggleFormPurpose, onSubmitSignUp }) => {
     const { values, handleChange, errors, isValid, resetForm} = useFormWithValidation();
-    console.log(values)
 
     const handleSubmit = (event) => {
         event.preventDefault();

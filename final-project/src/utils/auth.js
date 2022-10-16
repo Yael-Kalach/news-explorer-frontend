@@ -1,30 +1,35 @@
 export const BASE_URL = 'https://api.yaelk.students.nomoredomainssbs.ru';
 
-const checkResponse = (res) => {
+const checkResponse = ( res ) => {
+  console.log(res.json())
   if (res.ok) {
     return res.json();
   }
-  return Promise.reject(`Error ${res.status}`);
+  return Promise.reject(res);
 }
 
-export const register = ( user ) => {
-  console.log(user)
-  return fetch (`${BASE_URL}/signup`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify({
-      email: user.email,
-      password: user.password,
-      name: user.name,
-    }),
-  })
-  .then(res => {return checkResponse(res)})
-};
+export const register = async (user) => {
+  try {
+      const res = await fetch (`${BASE_URL}/signup`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+          },
+          body: JSON.stringify({
+              email: user.email,
+              password: user.password,
+              name: user.name,
+          }),
+      });
+      return checkResponse(res);
+  } catch (e) {
+    console.log(e)
+  }
+}
 
-export const signIn = (user) => {
+export const signIn = ( user ) => {
+  console.log(user)
   return fetch (`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
@@ -48,13 +53,13 @@ export const signIn = (user) => {
     });
 };
 
-export const checkToken = (token) => {
+export const checkToken = ( token ) => {
   return fetch (`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${ token }`,
       'Access-Control-Allow-Origin': '*',
     }
   })

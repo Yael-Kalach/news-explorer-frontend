@@ -74,6 +74,11 @@
     background-color: white;
     z-index: 5;
     margin-left: 24px;
+    visibility: hidden;
+}
+
+.news-card__keyword_visible {
+    visibility: visible;
 }
 
 .news-card__button_type_trash {
@@ -221,7 +226,8 @@
     }
 
     .news-card__icon {
-        padding: 0 8px
+        padding: 0 8px;
+        margin-top: 8px;
     }
 
     .news-card__keyword {

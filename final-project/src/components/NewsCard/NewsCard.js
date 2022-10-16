@@ -104,7 +104,7 @@ function NewsCard({
     return(
       <article className="news-card">
         <div className="news-card__top">
-          <p className="news-card__keyword">{cardKeyword}</p>
+          <p className={`news-card__keyword ${pathname === '/' ? '' : 'news-card__keyword_visible'}`} >{cardKeyword}</p>
           <div className="news-card__icon">
             <p className="news-card__tooltip">{isLoggedIn && pathname === "/" ? "Save article" : "Remove from saved"}</p>
             {pathname === '/' ? <button type="button" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleCardSave} /> 

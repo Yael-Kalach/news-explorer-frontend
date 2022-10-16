@@ -4,7 +4,7 @@ import PopupWithForm from "../PopupWithForm/PopupWithForm";
 
 const LoginPopup = ({ isOpen, onClose, toggleFormPurpose, onSubmitSignin }) => {
     const { values, handleChange, errors, isValid, resetForm} = useFormWithValidation();
-    
+
     const handleSubmit = (event) => {
         event.preventDefault();
         if (isValid) {
