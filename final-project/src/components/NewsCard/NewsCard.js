@@ -61,8 +61,10 @@ function NewsCard({
     }
   }
 
-  const saveArticle = async (articleData) => {
-    return await api.saveArticles(articleData);
+  const handleSaveArticle = async (articleData) => {
+    const newArticle = await api.saveArticles(articleData);
+    console.log('new article:', newArticle)
+    return newArticle
   };
 
   function handleCardSave(event) {
@@ -77,20 +79,25 @@ function NewsCard({
         link: cardUrl,
         image: cardUrlToImage,
       };
-      saveArticle(articleData).then((newArticle) => {
+      // console.log(articleData)
+      handleSaveArticle(articleData).then((newArticle) => {
+        console.log(newArticle);
+        setCurrentId(newArticle._id);
         setIsMarked(true);
-        setCurrentId(newArticle.data._id);
+      })
+      .catch((err) => {
+        console.log(err)
       });
     } else if (userLoggedIn && pathname === '/' && isMarked === true) {
       console.log('calling delete article');
-      api
-        .deleteArticle(event.currentTarget.parentNode.id)
+      api.deleteArticle(event.currentTarget.parentNode.id)
         .then((res) => {
           console.log(`deletingArticle = ${currentId}`);
           setIsMarked(false);
         })
         .catch((err) => {
           console.log(err);
+          console.log(err.stack);
         });
     }
   }
@@ -102,11 +109,11 @@ function NewsCard({
   );
 
     return(
-      <article className="news-card">
+      <article className="news-card" id={_id || currentId}>
         <div className="news-card__top">
           <p className={`news-card__keyword ${pathname === '/' ? '' : 'news-card__keyword_visible'}`} >{cardKeyword}</p>
           <div className="news-card__icon">
-            <p className="news-card__tooltip">{isLoggedIn && pathname === "/" ? "Save article" : "Remove from saved"}</p>
+            <p className="news-card__tooltip">{isLoggedIn && pathname === "/" ? "Sign in to save" : "Remove from saved"}</p>
             {pathname === '/' ? <button type="button" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleCardSave} /> 
             : <button type="trash" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleDelete} />}
           </div>

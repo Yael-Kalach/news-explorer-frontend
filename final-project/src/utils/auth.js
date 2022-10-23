@@ -1,35 +1,34 @@
 export const BASE_URL = 'https://api.yaelk.students.nomoredomainssbs.ru';
 
-const checkResponse = ( res ) => {
-  console.log(res.json())
+const checkResponse = async ( res ) => {
+  const asyncFunc = await res.json()
   if (res.ok) {
-    return res.json();
+    return asyncFunc;
   }
   return Promise.reject(res);
 }
 
 export const register = async (user) => {
   try {
-      const res = await fetch (`${BASE_URL}/signup`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
-          },
-          body: JSON.stringify({
-              email: user.email,
-              password: user.password,
-              name: user.name,
-          }),
-      });
-      return checkResponse(res);
+    const res = await fetch (`${BASE_URL}/signup`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({
+            email: user.email,
+            password: user.password,
+            name: user.name,
+        }),
+    });
+    return checkResponse(res);
   } catch (e) {
-    console.log(e)
+    console.log('error in register:', e)
   }
 }
 
 export const signIn = ( user ) => {
-  console.log(user)
   return fetch (`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {

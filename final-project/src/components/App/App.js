@@ -67,11 +67,10 @@ function App() {
 
   // registration related handlers
   function handleRegistration({ email, password, name }) {
-    console.log({ email, password, name })
     register({ email, password, name })
-    .then((res) => {
-      console.log(res)
-    })
+    // .then((res) => {
+    //   console.log(res)
+    // })
     .catch((err) => {
       if (err.status === 400) {
         console.log('400 - one of the fields was filled incorrectly');
@@ -85,11 +84,11 @@ function App() {
     })
     .finally(() => {
       setIsTooltipPopupOpen(true);
+      setIsRegistrationPopupOpen(!isRegistrationPopupOpen);
     })
   };
 
   function handleLogin( email, password ) {
-    console.log( email, password )
     signIn( email, password )
       .then((response) => {
         if (response && response.token) {

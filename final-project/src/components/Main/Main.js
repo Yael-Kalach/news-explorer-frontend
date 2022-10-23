@@ -2,8 +2,6 @@ import SearchForm from '../SearchForm/SearchForm.js'
 import About from '../About/About.js'
 
 function Main({ isLoggedIn }) {
-
-  
     return (
       <div className="main">
         <div>

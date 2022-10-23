@@ -1,4 +1,5 @@
 import React from 'react';
+const authorization = `Bearer ${localStorage.getItem('jwt')}`;
 
 class MainApi extends React.Component {
   constructor(props) {
@@ -12,15 +13,14 @@ class MainApi extends React.Component {
     if (res.ok) {
         return res.json();
     }
-    return Promise.reject(`Error ${res.status}`);
+    return Promise.reject(`Error ${res.status} : ${res.data}`);
   }
 
   getUserInformation() {
-    const authorization = `Bearer ${localStorage.getItem('jwt')}`;
     return fetch (`${this._baseUrl}/users/me`, {
       headers: {
         ...this._headers,
-        Authorization: authorization,
+        'Authorization': authorization,
         'Access-Control-Allow-Origin': '*',
       }
     })
@@ -28,25 +28,23 @@ class MainApi extends React.Component {
   }
 
   getSavedArticles() {
-    const authorization = `Bearer ${localStorage.getItem('jwt')}`;
     return fetch(`${this._baseUrl}/articles`, {
       headers: {
         ...this._headers,
-        Authorization: authorization,
+        'Authorization': authorization,
         'Access-Control-Allow-Origin': '*',
       },
-    }).then(this._getResponseData);
+    }).then(this._checkResponse);
   }
 
   saveArticles(newsCard) {
-    const authorization = `Bearer ${localStorage.getItem('jwt')}`;
     return fetch(`${this._baseUrl}/articles`, {
       headers: {
         ...this._headers,
-        Authorization: authorization,
+        'Authorization': authorization,
         'Access-Control-Allow-Origin': '*',
       },
-      method: 'post',
+      method: 'POST',
       body: JSON.stringify({
         keyword: localStorage.getItem('currentKeyword'),
         title: newsCard.title,
@@ -56,19 +54,18 @@ class MainApi extends React.Component {
         link: newsCard.link,
         image: newsCard.image,
       }),
-    }).then(this._getResponseData);
+    }).then(this._checkResponse);
   }
 
   deleteArticle(id) {
-    const authorization = `Bearer ${localStorage.getItem('jwt')}`;
     return fetch(`${this._baseUrl}/articles/${id}`, {
       headers: {
         ...this._headers,
-        Authorization: authorization,
+        'Authorization': authorization,
         'Access-Control-Allow-Origin': '*',
       },
       method: 'DELETE',
-    }).then(this._getResponseData);
+    }).then(this._checkResponse);
   }
 }
 
@@ -76,7 +73,7 @@ const api = new MainApi({
     baseUrl: "https://api.yaelk.students.nomoredomainssbs.ru",
     headers: {
       "Content-Type": "application/json",
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Access-Control-Allow-Origin': '*',
     }
 });

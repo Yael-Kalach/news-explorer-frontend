@@ -1,5 +1,4 @@
 import React from 'react';
-import NewsCardList from '../NewsCardList/NewsCardList';
 import NewsCard from '../NewsCard/NewsCard';
 import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
@@ -72,25 +71,31 @@ function SavedNews({ getSavedArticles, isLoggedIn }) {
     return (
       <CurrentUserContext.Provider value={currentUser}>
         <div className="saved-news">
-          <SavedNewsHeader orderedKeywordsString={orderedKeywordsString} name={localStorage.getItem('name')} savedArticles={savedArticles} />
-          <NewsCardList>
-          {savedArticles.length > 0 &&
-          savedArticles.map((newsCard, index) => (
-            <NewsCard
-              key={index}
-              cardKeyword={newsCard.keyword}
-              cardTitle={newsCard.title}
-              cardDescription={newsCard.description}
-              cardPublishedAt={newsCard.publishedAt}
-              cardSource={newsCard.source.name}
-              cardUrl={newsCard.url}
-              cardUrlToImage={newsCard.urlToImage}
-              _id={newsCard._id}
-              handleUpdateList={handleUpdateList}
-              isLoggedIn={isLoggedIn}
-            />
-          ))}
-          </NewsCardList>
+          <SavedNewsHeader 
+            orderedKeywordsString={orderedKeywordsString} 
+            name={localStorage.getItem('name')} 
+            savedArticles={savedArticles} 
+          />
+          <div className="news-card-list">
+            <div className="news-card-list__container">
+              {savedArticles.length > 0 &&
+              savedArticles.map((newsCard, index) => (
+                <NewsCard
+                  key={index}
+                  cardKeyword={newsCard.keyword}
+                  cardTitle={newsCard.title}
+                  cardDescription={newsCard.description}
+                  cardPublishedAt={newsCard.publishedAt}
+                  cardSource={newsCard.source.name}
+                  cardUrl={newsCard.url}
+                  cardUrlToImage={newsCard.urlToImage}
+                  _id={newsCard._id}
+                  handleUpdateList={handleUpdateList}
+                  isLoggedIn={isLoggedIn}
+                />
+              ))} 
+            </div>
+          </div>
         </div>
       </CurrentUserContext.Provider>
     );
