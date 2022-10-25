@@ -33,6 +33,7 @@ function SavedNews({ getSavedArticles, isLoggedIn }) {
     getSavedArticles()
       .then((res) => {
         setsavedArticles(res);
+        console.log(res)
       })
       .catch((err) => {
         console.log(err);
@@ -84,11 +85,12 @@ function SavedNews({ getSavedArticles, isLoggedIn }) {
                   key={index}
                   cardKeyword={newsCard.keyword}
                   cardTitle={newsCard.title}
-                  cardDescription={newsCard.description}
-                  cardPublishedAt={newsCard.publishedAt}
-                  cardSource={newsCard.source.name}
-                  cardUrl={newsCard.url}
-                  cardUrlToImage={newsCard.urlToImage}
+                  cardDescription={newsCard.text}
+                  cardUrl={newsCard.link}
+                  cardUrlToImage={newsCard.image}
+                  cardPublishedAt={newsCard.date}
+                  cardSource={newsCard.source}
+                  cardOwner={newsCard.owner}
                   _id={newsCard._id}
                   handleUpdateList={handleUpdateList}
                   isLoggedIn={isLoggedIn}
