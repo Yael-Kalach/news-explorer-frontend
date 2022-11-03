@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.yaelk.students.nomoredomainssbs.ru';
+export const BASE_URL = 'https://api.news-explorer-yaelk.students.nomoredomainssbs.ru';
 
 const checkResponse = async ( res ) => {
   const asyncFunc = await res.json()

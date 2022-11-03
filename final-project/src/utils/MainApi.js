@@ -70,7 +70,7 @@ class MainApi extends React.Component {
 }
 
 const api = new MainApi({
-    baseUrl: "https://api.yaelk.students.nomoredomainssbs.ru",
+    baseUrl: "https://api.news-explorer-yaelk.students.nomoredomainssbs.ru",
     headers: {
       "Content-Type": "application/json",
       'Accept': 'application/json',
