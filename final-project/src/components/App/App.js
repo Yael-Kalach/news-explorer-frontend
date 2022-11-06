@@ -24,6 +24,8 @@ function App() {
   // user and registration states
   const [currentUser, setCurrentUser] = React.useState({});
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  // Token
+  const [token, setToken] = React.useState(localStorage.getItem("jwt"))
 
   // preloader mounting
   React.useEffect(() => {
@@ -111,13 +113,17 @@ function App() {
   // User info
   
   React.useEffect(() => {
-    isLoggedIn &&
-    api.getUserInformation()
+    token &&
+    api.getUserInformation(token)
       .then((userData) => {
         localStorage.setItem('name', userData.name);
         setCurrentUser({ ...currentUser, ...userData });
+        setIsLoggedIn(true);
       })
-      .catch(console.log)
+      .catch((err) => {
+        console.log(err);
+        setIsLoggedIn(false);
+      });
   }, [isLoggedIn])
 
   function handleLogout() {
@@ -128,25 +134,23 @@ function App() {
   };
 
   // Token mounting
-  React.useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-      jwt &&
-      checkToken(jwt)
-        .then((res) => {
-          if (res) {
-            setIsLoggedIn(true);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsLoggedIn(false);
-        });
-  }, []);
+  // React.useEffect(() => {
+  //   token &&
+  //     checkToken(token)
+  //       .then((res) => {
+  //         if (res) {
+  //           
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         setIsLoggedIn(false);
+  //       });
+  // }, []);
 
   // Articles functionality
   const getSavedArticles = async () => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
+    if (token) {
       return await api.getSavedArticles();
     }
   };
