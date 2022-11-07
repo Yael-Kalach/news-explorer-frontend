@@ -115,7 +115,6 @@ function App() {
           if (res) {
             setIsLoggedIn(true)
             setCurrentUser(res);
-            console.log(res)
           }
         })
         .catch((err) => {
@@ -145,7 +144,7 @@ function App() {
     localStorage.removeItem("jwt");
     setCurrentUser({});
   };
-
+  console.log(currentUser);
   // Articles functionality
   const getSavedArticles = async () => {
     if (token) {
