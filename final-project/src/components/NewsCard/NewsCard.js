@@ -17,6 +17,7 @@ function NewsCard({
   // news card states
   const [isMarked, setIsMarked] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(_id);
+  const [token, setToken] = React.useState(localStorage.getItem("jwt"))
 
   const { pathname } = useLocation();
 
@@ -40,11 +41,11 @@ function NewsCard({
     return `${dateArr[1]} ${dateArr[2]}, ${dateArr[0]}`;
   }
 
-  function handleDelete(event) {
+  function handleDelete(card) {
     setIsMarked(true);
-    const isLoggedIn = localStorage.getItem('jwt') !== null;
+    const isLoggedIn = token !== null;
     if (isLoggedIn && pathname === '/saved-news' && isMarked === false) {
-      api.deleteArticle(event.currentTarget.parentNode.id)
+      api.deleteArticle(currentId)
         .then((res) => {
           const savedArticles = JSON.parse(
             localStorage.getItem('savedArticles')
@@ -63,12 +64,11 @@ function NewsCard({
 
   const handleSaveArticle = async (articleData) => {
     const newArticle = await api.saveArticles(articleData);
-    console.log('new article:', newArticle)
     return newArticle
   };
 
   function handleCardSave(event) {
-    const userLoggedIn = localStorage.getItem('jwt') !== null;
+    const userLoggedIn = token !== null;
     if (userLoggedIn && pathname === '/' && isMarked === false) {
       const articleData = {
         keyword: localStorage.getItem('currentKeyword'),
@@ -81,7 +81,6 @@ function NewsCard({
       };
       // console.log(articleData)
       handleSaveArticle(articleData).then((newArticle) => {
-        console.log(newArticle);
         setCurrentId(newArticle._id);
         setIsMarked(true);
       })
@@ -89,10 +88,8 @@ function NewsCard({
         console.log(err)
       });
     } else if (userLoggedIn && pathname === '/' && isMarked === true) {
-      console.log('calling delete article');
-      api.deleteArticle(event.currentTarget.parentNode.id)
+      api.deleteArticle(currentId)
         .then((res) => {
-          console.log(`deletingArticle = ${currentId}`);
           setIsMarked(false);
         })
         .catch((err) => {

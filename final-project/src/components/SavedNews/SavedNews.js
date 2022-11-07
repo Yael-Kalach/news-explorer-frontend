@@ -3,26 +3,6 @@ import NewsCard from '../NewsCard/NewsCard';
 import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-function getOrderedFrequestKeywords(savedArticlesEl) {
-  const countersObj = {};
-
-  Array.from(savedArticlesEl).forEach((obj) => {
-    const key = obj.keyword;
-    if (countersObj[key] === undefined) {
-      countersObj[key] = 1;
-    } else {
-      countersObj[key] += 1;
-    }
-  });
-  let entries = Object.entries(countersObj);
-  let sorted = entries.sort((a, b) => b[1] - a[1]);
-  const topKeywords = [];
-  sorted.forEach((arr) => {
-    topKeywords.push(arr[0]);
-  });
-  return topKeywords;
-}
-
 function SavedNews({ getSavedArticles, isLoggedIn }) {
   const [savedArticles, setsavedArticles] = React.useState([]);
 
@@ -32,8 +12,7 @@ function SavedNews({ getSavedArticles, isLoggedIn }) {
   React.useEffect(() => {
     getSavedArticles()
       .then((res) => {
-        setsavedArticles(res);
-        console.log(res)
+        setsavedArticles(Array.from(res.data));
       })
       .catch((err) => {
         console.log(err);
@@ -42,7 +21,6 @@ function SavedNews({ getSavedArticles, isLoggedIn }) {
 
   React.useEffect(() => {
     localStorage.setItem('savedArticles', JSON.stringify(savedArticles));
-
     const orderKeywords = getOrderedFrequestKeywords(savedArticles);
     let arr = '';
     if (orderKeywords.length === 0) {
@@ -58,6 +36,26 @@ function SavedNews({ getSavedArticles, isLoggedIn }) {
     }
     setorderedKeywordsString(arr);
   }, [savedArticles]);
+
+  function getOrderedFrequestKeywords(savedArticlesEl) {
+    const countersObj = {};
+  
+    Array.from(savedArticlesEl).forEach((obj) => {
+      const key = obj.keyword;
+      if (countersObj[key] === undefined) {
+        countersObj[key] = 1;
+      } else {
+        countersObj[key] += 1;
+      }
+    });
+    let entries = Object.entries(countersObj);
+    let sorted = entries.sort((a, b) => b[1] - a[1]);
+    const topKeywords = [];
+    sorted.forEach((arr) => {
+      topKeywords.push(arr[0]);
+    });
+    return topKeywords;
+  }
 
   function handleUpdateList() {
     getSavedArticles()

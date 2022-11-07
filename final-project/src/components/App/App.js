@@ -70,9 +70,6 @@ function App() {
   // registration related handlers
   function handleRegistration({ email, password, name }) {
     register({ email, password, name })
-    // .then((res) => {
-    //   console.log(res)
-    // })
     .catch((err) => {
       if (err.status === 400) {
         console.log('400 - one of the fields was filled incorrectly');
@@ -110,15 +107,31 @@ function App() {
       })
   };
 
-  // User info
-  
+  // Token mounting
   React.useEffect(() => {
     token &&
+      checkToken(token)
+        .then((res) => {
+          if (res) {
+            setIsLoggedIn(true)
+            setCurrentUser(res);
+            console.log(res)
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoggedIn(false);
+        });
+  }, []);
+
+  // User info
+
+  React.useEffect(() => {
+    isLoggedIn &&
     api.getUserInformation(token)
       .then((userData) => {
         localStorage.setItem('name', userData.name);
         setCurrentUser({ ...currentUser, ...userData });
-        setIsLoggedIn(true);
       })
       .catch((err) => {
         console.log(err);
@@ -128,25 +141,10 @@ function App() {
 
   function handleLogout() {
     setIsLoggedIn(false);
-    localStorage.removeItem("jwt");
     localStorage.removeItem("name");
+    localStorage.removeItem("jwt");
     setCurrentUser({});
   };
-
-  // Token mounting
-  // React.useEffect(() => {
-  //   token &&
-  //     checkToken(token)
-  //       .then((res) => {
-  //         if (res) {
-  //           
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         setIsLoggedIn(false);
-  //       });
-  // }, []);
 
   // Articles functionality
   const getSavedArticles = async () => {
