@@ -60,7 +60,7 @@ function SavedNews({ getSavedArticles, isLoggedIn }) {
   function handleUpdateList() {
     getSavedArticles()
       .then((res) => {
-        setsavedArticles(res);
+        setsavedArticles(res.data);
       })
       .catch((err) => {
         console.log(err);

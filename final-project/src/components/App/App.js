@@ -94,6 +94,7 @@ function App() {
           localStorage.setItem('jwt', response.token);
           setIsLoggedIn(true);
           setIsLoginPopupOpen(false);
+          setToken(response.token)
         } else {
           throw new Error('No token recieved');
         }
@@ -109,42 +110,27 @@ function App() {
 
   // Token mounting
   React.useEffect(() => {
-    token &&
+    if (!token) return
       checkToken(token)
-        .then((res) => {
-          if (res) {
-            setIsLoggedIn(true)
-            setCurrentUser(res);
-          }
+        .then((userData) => {
+          setCurrentUser(userData);
+          localStorage.setItem('name', userData.name);
+          setIsLoggedIn(true)
         })
         .catch((err) => {
           console.log(err);
           setIsLoggedIn(false);
         });
-  }, []);
-
-  // User info
-
-  React.useEffect(() => {
-    isLoggedIn &&
-    api.getUserInformation(token)
-      .then((userData) => {
-        localStorage.setItem('name', userData.name);
-        setCurrentUser({ ...currentUser, ...userData });
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoggedIn(false);
-      });
-  }, [isLoggedIn])
+  }, [token]);
 
   function handleLogout() {
     setIsLoggedIn(false);
     localStorage.removeItem("name");
     localStorage.removeItem("jwt");
+    localStorage.removeItem("savedArticles");
     setCurrentUser({});
   };
-  console.log(currentUser);
+  
   // Articles functionality
   const getSavedArticles = async () => {
     if (token) {

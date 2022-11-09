@@ -79,7 +79,6 @@ function NewsCard({
         link: cardUrl,
         image: cardUrlToImage,
       };
-      // console.log(articleData)
       handleSaveArticle(articleData).then((newArticle) => {
         setCurrentId(newArticle._id);
         setIsMarked(true);
@@ -94,7 +93,6 @@ function NewsCard({
         })
         .catch((err) => {
           console.log(err);
-          console.log(err.stack);
         });
     }
   }
