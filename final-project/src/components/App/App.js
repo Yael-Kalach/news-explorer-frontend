@@ -112,14 +112,6 @@ function App() {
       })
   };
 
-  function handleLogout() {
-    setIsLoggedIn(false);
-    localStorage.removeItem("name");
-    localStorage.removeItem("jwt");
-    setCurrentUser({});
-    setsavedArticles([]);
-  };
-
   // Token mounting
   React.useEffect(() => {
     if (!token) return
@@ -135,13 +127,22 @@ function App() {
         });
       getSavedArticles()
         .then((res) => {
-          setsavedArticles(res.data);
+          setsavedArticles(Array.from(res.data));
         })
         .catch((err) => {
           console.log(err);
         });
   }, [token]);
 
+  function handleLogout() {
+    setIsLoggedIn(false);
+    localStorage.removeItem("name");
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("savedArticles");
+    setCurrentUser({});
+    setsavedArticles([]);
+  };
+  
   // Articles functionality
   const getSavedArticles = async () => {
     if (token) {
@@ -169,7 +170,7 @@ function App() {
   function getOrderedFrequestKeywords(savedArticlesEl) {
     const countersObj = {};
   
-    (savedArticlesEl).forEach((obj) => {
+    Array.from(savedArticlesEl).forEach((obj) => {
       const key = obj.keyword;
       if (countersObj[key] === undefined) {
         countersObj[key] = 1;
