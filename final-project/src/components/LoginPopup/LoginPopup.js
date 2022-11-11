@@ -15,9 +15,9 @@ const LoginPopup = ({ isOpen, onClose, toggleFormPurpose, onSubmitSignin }) => {
         }
     };
 
-     React.useEffect(() => {
-       resetForm();
-     }, [isOpen]);
+    React.useEffect(() => {
+    resetForm();
+    }, [isOpen]);
   
      return (
         <PopupWithForm isOpen={isOpen} onClose={onClose}>

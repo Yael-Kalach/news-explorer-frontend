@@ -26,6 +26,9 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   // Token
   const [token, setToken] = React.useState(localStorage.getItem("jwt"))
+  // Articles
+  const [savedArticles, setsavedArticles] = React.useState([]);
+  const [orderedKeywordsString, setorderedKeywordsString] = React.useState([]);
 
   // preloader mounting
   React.useEffect(() => {
@@ -95,6 +98,7 @@ function App() {
           setIsLoggedIn(true);
           setIsLoginPopupOpen(false);
           setToken(response.token)
+          getSavedArticles()
         } else {
           throw new Error('No token recieved');
         }
@@ -106,6 +110,14 @@ function App() {
             console.log(`Something is not working... Error: ${err}`);
           }
       })
+  };
+
+  function handleLogout() {
+    setIsLoggedIn(false);
+    localStorage.removeItem("name");
+    localStorage.removeItem("jwt");
+    setCurrentUser({});
+    setsavedArticles([]);
   };
 
   // Token mounting
@@ -121,22 +133,68 @@ function App() {
           console.log(err);
           setIsLoggedIn(false);
         });
+      getSavedArticles()
+        .then((res) => {
+          setsavedArticles(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   }, [token]);
 
-  function handleLogout() {
-    setIsLoggedIn(false);
-    localStorage.removeItem("name");
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("savedArticles");
-    setCurrentUser({});
-  };
-  
   // Articles functionality
   const getSavedArticles = async () => {
     if (token) {
       return await api.getSavedArticles();
     }
   };
+
+  React.useEffect(() => {
+    const orderKeywords = getOrderedFrequestKeywords(savedArticles);
+    let arr = '';
+    if (orderKeywords.length === 0) {
+      arr = '';
+    } else if (orderKeywords.length === 1) {
+      arr = orderKeywords[0];
+    } else if (orderKeywords.length === 2) {
+      arr = `${orderKeywords[0]}, ${orderKeywords[1]}`;
+    } else {
+      arr = `${orderKeywords[0]}, ${orderKeywords[1]} and ${
+        orderKeywords.length - 2
+      } others`;
+    }
+    setorderedKeywordsString(arr);
+  }, [savedArticles]);
+
+  function getOrderedFrequestKeywords(savedArticlesEl) {
+    const countersObj = {};
+  
+    (savedArticlesEl).forEach((obj) => {
+      const key = obj.keyword;
+      if (countersObj[key] === undefined) {
+        countersObj[key] = 1;
+      } else {
+        countersObj[key] += 1;
+      }
+    });
+    let entries = Object.entries(countersObj);
+    let sorted = entries.sort((a, b) => b[1] - a[1]);
+    const topKeywords = [];
+    sorted.forEach((arr) => {
+      topKeywords.push(arr[0]);
+    });
+    return topKeywords;
+  }
+
+  function handleUpdateList() {
+    getSavedArticles()
+      .then((res) => {
+        setsavedArticles(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -162,6 +220,9 @@ function App() {
                   <SavedNews 
                     getSavedArticles={getSavedArticles} 
                     isLoggedIn={isLoggedIn}
+                    savedArticles={savedArticles}
+                    orderedKeywordsString={orderedKeywordsString}
+                    handleUpdateList={handleUpdateList}
                   />
                 </ProtectedRoute>
               }
