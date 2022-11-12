@@ -4,7 +4,13 @@ import SearchResults from "../SearchResults/SearchResults"
 import ResultsNotFound from "../ResultsNotFound/ResultsNotFound";
 import ResultsError from "../ResultsError/ResultsError";
 
-function SearchForm( isLoggedIn ) {
+function SearchForm({ 
+  isLoggedIn,
+  handleDelete, 
+  handleCardSave,
+  isMarked,
+  currentId 
+}) {
   const DISPLAY_COUNT = 3;
   // input ref
   const searchInputRef = React.useRef(null);
@@ -94,6 +100,10 @@ function SearchForm( isLoggedIn ) {
           {isSearchResult && (
             <SearchResults
               resultSearch={searchArticles}
+              handleDelete={handleDelete}
+              handleCardSave={handleCardSave}
+              isMarked={isMarked}
+              currentId={currentId}
               handleShowMore={() =>
                 setArticlesCount(
                   (articlesCount / DISPLAY_COUNT + 1) * DISPLAY_COUNT

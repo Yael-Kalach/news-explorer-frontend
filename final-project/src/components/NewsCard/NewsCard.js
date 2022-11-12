@@ -7,17 +7,19 @@ function NewsCard({
   cardTitle, 
   cardDescription, 
   cardPublishedAt, 
-  cardSource, 
-  cardUrl, 
+  cardSource,
   cardUrlToImage, 
   _id, 
-  handleUpdateList,
-  isLoggedIn
+  handleDelete,
+  isLoggedIn,
+  handleCardSave,
+  isMarked,
+  currentId
   }) {
-  // news card states
-  const [isMarked, setIsMarked] = React.useState(false);
-  const [currentId, setCurrentId] = React.useState(_id);
-  const [token, setToken] = React.useState(localStorage.getItem("jwt"))
+  // // news card states
+  // const [isMarked, setIsMarked] = React.useState(false);
+  // const [currentId, setCurrentId] = React.useState(_id);
+  // const [token, setToken] = React.useState(localStorage.getItem("jwt"))
 
   const { pathname } = useLocation();
 
@@ -39,62 +41,6 @@ function NewsCard({
     ];
     dateArr[1] = monthNames[parseInt(dateArr[1]) - 1];
     return `${dateArr[1]} ${dateArr[2]}, ${dateArr[0]}`;
-  }
-
-  function handleDelete(card) {
-    setIsMarked(true);
-    const isLoggedIn = token !== null;
-    if (isLoggedIn && pathname === '/saved-news' && isMarked === false) {
-      api.deleteArticle(currentId)
-        .then((res) => {
-          const savedArticles = JSON.parse(
-            localStorage.getItem('savedArticles')
-          );
-
-          const updatedSavedArticles = savedArticles.filter(
-            (obj) => obj._id !== currentId
-          );
-          handleUpdateList(updatedSavedArticles);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
-  const handleSaveArticle = async (articleData) => {
-    const newArticle = await api.saveArticles(articleData);
-    return newArticle
-  };
-
-  function handleCardSave(event) {
-    const userLoggedIn = token !== null;
-    if (userLoggedIn && pathname === '/' && isMarked === false) {
-      const articleData = {
-        keyword: localStorage.getItem('currentKeyword'),
-        title: cardTitle,
-        text: cardDescription,
-        date: cardPublishedAt,
-        source: cardSource,
-        link: cardUrl,
-        image: cardUrlToImage,
-      };
-      handleSaveArticle(articleData).then((newArticle) => {
-        setCurrentId(newArticle._id);
-        setIsMarked(true);
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-    } else if (userLoggedIn && pathname === '/' && isMarked === true) {
-      api.deleteArticle(currentId)
-        .then((res) => {
-          setIsMarked(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
   }
 
   const cardLikeButtonClassName = (

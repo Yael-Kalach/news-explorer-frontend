@@ -1,7 +1,15 @@
 import React from "react";
 import NewsCard from "../NewsCard/NewsCard";
 
-function SearchResults({ resultSearch, handleShowMore, isLoggedIn }){
+function SearchResults({ 
+  resultSearch, 
+  handleShowMore, 
+  isLoggedIn,
+  handleDelete, 
+  handleCardSave,
+  isMarked,
+  currentId
+}){
     const currentArticlesCount = localStorage.getItem('currentArticlesCount');
     const currentDisplayedResult = resultSearch.slice(0, currentArticlesCount);
 
@@ -21,6 +29,10 @@ function SearchResults({ resultSearch, handleShowMore, isLoggedIn }){
                   cardUrl={newsCard.url}
                   cardUrlToImage={newsCard.urlToImage}
                   isLoggedIn={isLoggedIn}
+                  handleDelete={handleDelete}
+                  handleCardSave={handleCardSave}
+                  isMarked={isMarked}
+                  currentId={currentId}
                 />
                 ))}
             </div>

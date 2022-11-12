@@ -3,11 +3,11 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import SavedNews from '../SavedNews/SavedNews';
-import PopupWithForm from '../PopupWithForm/PopupWithForm';
+import NewsCard from '../NewsCard/NewsCard';
 import Preloader from '../Preloader/Preloader';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { register, signIn, checkToken } from '../../utils/auth'
 import RegistrationPopup from '../RegistrationPopup/RegistrationPopup'
 import LoginPopup from '../LoginPopup/LoginPopup';
@@ -28,7 +28,17 @@ function App() {
   const [token, setToken] = React.useState(localStorage.getItem("jwt"))
   // Articles
   const [savedArticles, setsavedArticles] = React.useState([]);
-  const [orderedKeywordsString, setorderedKeywordsString] = React.useState([]);
+  // news card states
+  const [isMarked, setIsMarked] = React.useState(false);
+  const [currentId, setCurrentId] = React.useState(_id);
+  const [cardTitle, setCardTitle] = React.useState();
+  const [cardDescription, setCardDescription] = React.useState();
+  const [cardSource, setCardSource] = React.useState();
+  const [cardUrl, setCardUrl] = React.useState();
+  const [cardPublishedAt, setCardPublishedAt] = React.useState();
+  const [cardUrlToImage, setCardUrlToImage] = React.useState();
+  const { pathname } = useLocation();
+
 
   // preloader mounting
   React.useEffect(() => {
@@ -98,7 +108,6 @@ function App() {
           setIsLoggedIn(true);
           setIsLoginPopupOpen(false);
           setToken(response.token)
-          getSavedArticles()
         } else {
           throw new Error('No token recieved');
         }
@@ -119,18 +128,12 @@ function App() {
         .then((userData) => {
           setCurrentUser(userData);
           localStorage.setItem('name', userData.name);
+          getSavedArticles()
           setIsLoggedIn(true)
         })
         .catch((err) => {
           console.log(err);
           setIsLoggedIn(false);
-        });
-      getSavedArticles()
-        .then((res) => {
-          setsavedArticles(Array.from(res.data));
-        })
-        .catch((err) => {
-          console.log(err);
         });
   }, [token]);
 
@@ -138,9 +141,8 @@ function App() {
     setIsLoggedIn(false);
     localStorage.removeItem("name");
     localStorage.removeItem("jwt");
-    localStorage.removeItem("savedArticles");
+    localStorage.setItem("savedArticles", [{}]);
     setCurrentUser({});
-    setsavedArticles([]);
   };
   
   // Articles functionality
@@ -150,42 +152,52 @@ function App() {
     }
   };
 
-  React.useEffect(() => {
-    const orderKeywords = getOrderedFrequestKeywords(savedArticles);
-    let arr = '';
-    if (orderKeywords.length === 0) {
-      arr = '';
-    } else if (orderKeywords.length === 1) {
-      arr = orderKeywords[0];
-    } else if (orderKeywords.length === 2) {
-      arr = `${orderKeywords[0]}, ${orderKeywords[1]}`;
-    } else {
-      arr = `${orderKeywords[0]}, ${orderKeywords[1]} and ${
-        orderKeywords.length - 2
-      } others`;
-    }
-    setorderedKeywordsString(arr);
-  }, [savedArticles]);
-
-  function getOrderedFrequestKeywords(savedArticlesEl) {
-    const countersObj = {};
-  
-    Array.from(savedArticlesEl).forEach((obj) => {
-      const key = obj.keyword;
-      if (countersObj[key] === undefined) {
-        countersObj[key] = 1;
-      } else {
-        countersObj[key] += 1;
+  const handleSaveArticle = (article) => {
+    api.saveArticles(article).then((article) => {
+      if (article) {
+        setsavedArticles([...savedArticles, article])
       }
-    });
-    let entries = Object.entries(countersObj);
-    let sorted = entries.sort((a, b) => b[1] - a[1]);
-    const topKeywords = [];
-    sorted.forEach((arr) => {
-      topKeywords.push(arr[0]);
-    });
-    return topKeywords;
+    })
+  };
+
+  function handleCardSave(event) {
+    const userLoggedIn = token !== null;
+    if (userLoggedIn && pathname === '/' && isMarked === false) {
+      const articleData = {
+        keyword: localStorage.getItem('currentKeyword'),
+        title: cardTitle,
+        text: cardDescription,
+        date: cardPublishedAt,
+        source: cardSource,
+        link: cardUrl,
+        image: cardUrlToImage,
+      };
+      handleSaveArticle(articleData).then((newArticle) => {
+        setCurrentId(newArticle._id);
+        setIsMarked(true);
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+    } else if (userLoggedIn && pathname === '/' && isMarked === true) {
+      api.deleteArticle(currentId)
+        .then((res) => {
+          setIsMarked(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
+  
+  function handleDelete(id) {
+    api.deleteArticle(id).then((article) => {
+      if (article) {
+        const newArticles = [...savedArticles].filter((a) => a._id !== id)
+        setsavedArticles(newArticles)
+      }
+    })
+  };
 
   function handleUpdateList() {
     getSavedArticles()
@@ -195,7 +207,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -222,13 +234,48 @@ function App() {
                     getSavedArticles={getSavedArticles} 
                     isLoggedIn={isLoggedIn}
                     savedArticles={savedArticles}
-                    orderedKeywordsString={orderedKeywordsString}
+                    setsavedArticles={setsavedArticles}
                     handleUpdateList={handleUpdateList}
-                  />
+                    handleSaveArticle={handleSaveArticle}
+                    handleDelete={handleDelete}
+                    handleCardSave={handleCardSave}
+                  >
+                    {savedArticles.length > 0 &&
+                    savedArticles.map((newsCard, index) => (
+                      <NewsCard
+                        key={index}
+                        cardKeyword={newsCard.keyword}
+                        cardTitle={newsCard.title}
+                        cardDescription={newsCard.text}
+                        cardUrl={newsCard.link}
+                        cardUrlToImage={newsCard.image}
+                        cardPublishedAt={newsCard.date}
+                        cardSource={newsCard.source}
+                        cardOwner={newsCard.owner}
+                        _id={newsCard._id}
+                        handleUpdateList={handleUpdateList}
+                        isLoggedIn={isLoggedIn}
+                        setsavedArticles={setsavedArticles}
+                        handleSaveArticle={handleSaveArticle}
+                        handleDelete={handleDelete}
+                        isMarked={isMarked}
+                        currentId={currentId}
+                      />
+                    ))} 
+                  </SavedNews>
                 </ProtectedRoute>
               }
             />
-            <Route exact path='/' element={<Main isLoggedIn={isLoggedIn} />} />
+            <Route 
+              exact path='/' 
+              element={
+              <Main 
+                handleSaveArticle={handleSaveArticle} 
+                isLoggedIn={isLoggedIn}
+                handleDelete={handleDelete}
+                handleCardSave={handleCardSave}
+              />} 
+            />
           </Routes>
           <RegistrationPopup 
             isOpen={isRegistrationPopupOpen}
