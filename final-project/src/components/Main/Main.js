@@ -3,20 +3,20 @@ import About from '../About/About.js'
 
 function Main({ 
   isLoggedIn,
-  handleCardSave, 
+  handleSaveArticle, 
   handleDelete,
-  isMarked,
-  currentId
+  token,
+  formatDate
 }) {
     return (
       <div className="main">
         <div>
           <SearchForm 
             isLoggedIn={isLoggedIn}
-            handleCardSave={handleCardSave}
+            handleSaveArticle={handleSaveArticle}
             handleDelete={handleDelete}
-            currentId={currentId}
-            isMarked={isMarked} 
+            token={token}
+            formatDate={formatDate}
           />
           <About />
         </div>

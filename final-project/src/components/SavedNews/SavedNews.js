@@ -22,7 +22,6 @@ function SavedNews({
   }, [currentUser]);
 
   React.useEffect(() => {
-    localStorage.setItem('savedArticles', JSON.stringify(savedArticles));
     const orderKeywords = getOrderedFrequestKeywords(savedArticles);
     let arr = '';
     if (orderKeywords.length === 0) {

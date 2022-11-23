@@ -7,40 +7,47 @@ function NewsCard({
   cardTitle, 
   cardDescription, 
   cardPublishedAt, 
-  cardSource,
+  cardSource, 
+  cardUrl, 
   cardUrlToImage, 
-  _id, 
-  handleDelete,
+  _id,
   isLoggedIn,
-  handleCardSave,
-  isMarked,
-  currentId
+  token,
+  formatDate,
+  handleSaveArticle,
+  handleDelete
   }) {
-  // // news card states
-  // const [isMarked, setIsMarked] = React.useState(false);
-  // const [currentId, setCurrentId] = React.useState(_id);
-  // const [token, setToken] = React.useState(localStorage.getItem("jwt"))
-
+  // news card states
+  const [isMarked, setIsMarked] = React.useState(false);
+  const [currentId, setCurrentId] = React.useState(_id);
   const { pathname } = useLocation();
 
-  function formatDate(date) {
-    const dateArr = date.toString().slice(0, 10).split('-', 3);
-    const monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    dateArr[1] = monthNames[parseInt(dateArr[1]) - 1];
-    return `${dateArr[1]} ${dateArr[2]}, ${dateArr[0]}`;
+  const articleData = {
+    keyword: localStorage.getItem('currentKeyword'),
+    title: cardTitle,
+    text: cardDescription,
+    date: cardPublishedAt,
+    source: cardSource,
+    link: cardUrl,
+    image: cardUrlToImage,
+    id: _id
+  };
+
+  function handleCardSave(event) {
+    const userLoggedIn = token !== null;
+    if (userLoggedIn && pathname === '/' && isMarked === false) {
+      handleSaveArticle(articleData)
+      setCurrentId(articleData.id);
+      setIsMarked(true);
+    } else if (userLoggedIn && pathname === '/' && isMarked === true) {
+      api.deleteArticle(currentId)
+      console.log(articleData.id)
+      setIsMarked(false);
+    }
+  }
+
+  function onClickDelete() {
+    handleDelete(currentId)
   }
 
   const cardLikeButtonClassName = (
@@ -56,7 +63,7 @@ function NewsCard({
           <div className="news-card__icon">
             <p className="news-card__tooltip">{isLoggedIn && pathname === "/" ? "Sign in to save" : "Remove from saved"}</p>
             {pathname === '/' ? <button type="button" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleCardSave} /> 
-            : <button type="trash" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleDelete} />}
+            : <button type="trash" aria-label="bookmark" className={cardLikeButtonClassName} onClick={onClickDelete} />}
           </div>
         </div>
         <img className="news-card__image" src={cardUrlToImage} alt={cardTitle} />

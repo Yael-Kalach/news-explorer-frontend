@@ -7,9 +7,9 @@ import ResultsError from "../ResultsError/ResultsError";
 function SearchForm({ 
   isLoggedIn,
   handleDelete, 
-  handleCardSave,
-  isMarked,
-  currentId 
+  handleSaveArticle,
+  token,
+  formatDate
 }) {
   const DISPLAY_COUNT = 3;
   // input ref
@@ -101,9 +101,9 @@ function SearchForm({
             <SearchResults
               resultSearch={searchArticles}
               handleDelete={handleDelete}
-              handleCardSave={handleCardSave}
-              isMarked={isMarked}
-              currentId={currentId}
+              handleSaveArticle={handleSaveArticle}
+              token={token}
+              formatDate={formatDate}
               handleShowMore={() =>
                 setArticlesCount(
                   (articlesCount / DISPLAY_COUNT + 1) * DISPLAY_COUNT

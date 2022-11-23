@@ -4,11 +4,11 @@ import NewsCard from "../NewsCard/NewsCard";
 function SearchResults({ 
   resultSearch, 
   handleShowMore, 
-  isLoggedIn,
-  handleDelete, 
-  handleCardSave,
-  isMarked,
-  currentId
+  isLoggedIn, 
+  handleSaveArticle, 
+  handleDelete,
+  token,
+  formatDate
 }){
     const currentArticlesCount = localStorage.getItem('currentArticlesCount');
     const currentDisplayedResult = resultSearch.slice(0, currentArticlesCount);
@@ -29,10 +29,10 @@ function SearchResults({
                   cardUrl={newsCard.url}
                   cardUrlToImage={newsCard.urlToImage}
                   isLoggedIn={isLoggedIn}
+                  handleSaveArticle={handleSaveArticle}
                   handleDelete={handleDelete}
-                  handleCardSave={handleCardSave}
-                  isMarked={isMarked}
-                  currentId={currentId}
+                  formatDate={formatDate}
+                  token={token}
                 />
                 ))}
             </div>

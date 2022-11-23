@@ -30,13 +30,6 @@ function App() {
   const [savedArticles, setsavedArticles] = React.useState([]);
   // news card states
   const [isMarked, setIsMarked] = React.useState(false);
-  const [currentId, setCurrentId] = React.useState(_id);
-  const [cardTitle, setCardTitle] = React.useState();
-  const [cardDescription, setCardDescription] = React.useState();
-  const [cardSource, setCardSource] = React.useState();
-  const [cardUrl, setCardUrl] = React.useState();
-  const [cardPublishedAt, setCardPublishedAt] = React.useState();
-  const [cardUrlToImage, setCardUrlToImage] = React.useState();
   const { pathname } = useLocation();
 
 
@@ -128,7 +121,7 @@ function App() {
         .then((userData) => {
           setCurrentUser(userData);
           localStorage.setItem('name', userData.name);
-          getSavedArticles()
+          handleUpdateList()
           setIsLoggedIn(true)
         })
         .catch((err) => {
@@ -141,7 +134,7 @@ function App() {
     setIsLoggedIn(false);
     localStorage.removeItem("name");
     localStorage.removeItem("jwt");
-    localStorage.setItem("savedArticles", [{}]);
+    setsavedArticles([]);
     setCurrentUser({});
   };
   
@@ -152,51 +145,36 @@ function App() {
     }
   };
 
-  const handleSaveArticle = (article) => {
-    api.saveArticles(article).then((article) => {
-      if (article) {
-        setsavedArticles([...savedArticles, article])
+  const handleSaveArticle = (articleData) => {
+    api.saveArticles(articleData).then((articleData) => {
+      if (articleData){
+        setsavedArticles([...savedArticles, articleData])
+        return articleData
       }
     })
   };
 
-  function handleCardSave(event) {
-    const userLoggedIn = token !== null;
-    if (userLoggedIn && pathname === '/' && isMarked === false) {
-      const articleData = {
-        keyword: localStorage.getItem('currentKeyword'),
-        title: cardTitle,
-        text: cardDescription,
-        date: cardPublishedAt,
-        source: cardSource,
-        link: cardUrl,
-        image: cardUrlToImage,
-      };
-      handleSaveArticle(articleData).then((newArticle) => {
-        setCurrentId(newArticle._id);
-        setIsMarked(true);
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-    } else if (userLoggedIn && pathname === '/' && isMarked === true) {
-      api.deleteArticle(currentId)
-        .then((res) => {
-          setIsMarked(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+  function formatDate(date) {
+    return new Date(date).toLocaleDateString('en-us', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
   }
   
   function handleDelete(id) {
+    console.log(savedArticles)
+    console.log(id)
     api.deleteArticle(id).then((article) => {
       if (article) {
         const newArticles = [...savedArticles].filter((a) => a._id !== id)
         setsavedArticles(newArticles)
+        console.log(newArticles)
       }
     })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
   function handleUpdateList() {
@@ -232,17 +210,12 @@ function App() {
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
                   <SavedNews 
                     getSavedArticles={getSavedArticles} 
-                    isLoggedIn={isLoggedIn}
                     savedArticles={savedArticles}
                     setsavedArticles={setsavedArticles}
-                    handleUpdateList={handleUpdateList}
-                    handleSaveArticle={handleSaveArticle}
-                    handleDelete={handleDelete}
-                    handleCardSave={handleCardSave}
                   >
                     {savedArticles.length > 0 &&
-                    savedArticles.map((newsCard, index) => (
-                      <NewsCard
+                    savedArticles.map((newsCard, index) => {
+                      return (<NewsCard
                         key={index}
                         cardKeyword={newsCard.keyword}
                         cardTitle={newsCard.title}
@@ -251,17 +224,16 @@ function App() {
                         cardUrlToImage={newsCard.image}
                         cardPublishedAt={newsCard.date}
                         cardSource={newsCard.source}
-                        cardOwner={newsCard.owner}
                         _id={newsCard._id}
                         handleUpdateList={handleUpdateList}
                         isLoggedIn={isLoggedIn}
                         setsavedArticles={setsavedArticles}
                         handleSaveArticle={handleSaveArticle}
                         handleDelete={handleDelete}
-                        isMarked={isMarked}
-                        currentId={currentId}
-                      />
-                    ))} 
+                        formatDate={formatDate}
+                        token={token}
+                      />)
+                    })} 
                   </SavedNews>
                 </ProtectedRoute>
               }
@@ -273,7 +245,8 @@ function App() {
                 handleSaveArticle={handleSaveArticle} 
                 isLoggedIn={isLoggedIn}
                 handleDelete={handleDelete}
-                handleCardSave={handleCardSave}
+                formatDate={formatDate}
+                token={token}
               />} 
             />
           </Routes>
