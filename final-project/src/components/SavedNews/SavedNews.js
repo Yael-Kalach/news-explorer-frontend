@@ -3,7 +3,7 @@ import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function SavedNews({ 
-  getSavedArticles,
+  handleGetSavedArticles,
   savedArticles, 
   setsavedArticles, 
   children
@@ -12,7 +12,7 @@ function SavedNews({
   const [orderedKeywordsString, setorderedKeywordsString] = React.useState([]);
 
   React.useEffect(() => {
-    getSavedArticles()
+    handleGetSavedArticles()
       .then((res) => {
         setsavedArticles(Array.from(res.data));
       })

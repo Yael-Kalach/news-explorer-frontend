@@ -121,8 +121,8 @@ function App() {
         .then((userData) => {
           setCurrentUser(userData);
           localStorage.setItem('name', userData.name);
-          handleUpdateList()
           setIsLoggedIn(true)
+          handleGetSavedArticles()
         })
         .catch((err) => {
           console.log(err);
@@ -139,7 +139,7 @@ function App() {
   };
   
   // Articles functionality
-  const getSavedArticles = async () => {
+  const handleGetSavedArticles = async () => {
     if (token) {
       return await api.getSavedArticles();
     }
@@ -166,6 +166,7 @@ function App() {
     console.log(savedArticles)
     console.log(id)
     api.deleteArticle(id).then((article) => {
+      console.log(article.id)
       if (article) {
         const newArticles = [...savedArticles].filter((a) => a._id !== id)
         setsavedArticles(newArticles)
@@ -177,15 +178,15 @@ function App() {
     });
   };
 
-  function handleUpdateList() {
-    getSavedArticles()
-      .then((res) => {
-        setsavedArticles(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // function handleUpdateList() {
+  //   getSavedArticles()
+  //     .then((res) => {
+  //       setsavedArticles(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -209,7 +210,7 @@ function App() {
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
                   <SavedNews 
-                    getSavedArticles={getSavedArticles} 
+                    handleGetSavedArticles={handleGetSavedArticles} 
                     savedArticles={savedArticles}
                     setsavedArticles={setsavedArticles}
                   >
@@ -225,7 +226,6 @@ function App() {
                         cardPublishedAt={newsCard.date}
                         cardSource={newsCard.source}
                         _id={newsCard._id}
-                        handleUpdateList={handleUpdateList}
                         isLoggedIn={isLoggedIn}
                         setsavedArticles={setsavedArticles}
                         handleSaveArticle={handleSaveArticle}
