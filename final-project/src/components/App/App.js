@@ -29,8 +29,8 @@ function App() {
   // Articles
   const [savedArticles, setsavedArticles] = React.useState([]);
   // news card states
-  const [isMarked, setIsMarked] = React.useState(false);
-  const { pathname } = useLocation();
+  // const [isMarked, setIsMarked] = React.useState(false);
+  // const { pathname } = useLocation();
 
 
   // preloader mounting
@@ -122,7 +122,6 @@ function App() {
           setCurrentUser(userData);
           localStorage.setItem('name', userData.name);
           setIsLoggedIn(true)
-          handleGetSavedArticles()
         })
         .catch((err) => {
           console.log(err);
@@ -140,7 +139,7 @@ function App() {
   
   // Articles functionality
   const handleGetSavedArticles = async () => {
-    if (token) {
+    if (isLoggedIn) {
       return await api.getSavedArticles();
     }
   };
@@ -163,30 +162,16 @@ function App() {
   }
   
   function handleDelete(id) {
-    console.log(savedArticles)
-    console.log(id)
     api.deleteArticle(id).then((article) => {
-      console.log(article.id)
       if (article) {
         const newArticles = [...savedArticles].filter((a) => a._id !== id)
         setsavedArticles(newArticles)
-        console.log(newArticles)
       }
     })
     .catch((err) => {
       console.log(err);
     });
   };
-
-  // function handleUpdateList() {
-  //   getSavedArticles()
-  //     .then((res) => {
-  //       setsavedArticles(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -227,7 +212,6 @@ function App() {
                         cardSource={newsCard.source}
                         _id={newsCard._id}
                         isLoggedIn={isLoggedIn}
-                        setsavedArticles={setsavedArticles}
                         handleSaveArticle={handleSaveArticle}
                         handleDelete={handleDelete}
                         formatDate={formatDate}

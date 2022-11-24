@@ -29,8 +29,7 @@ function NewsCard({
     date: cardPublishedAt,
     source: cardSource,
     link: cardUrl,
-    image: cardUrlToImage,
-    id: _id
+    image: cardUrlToImage
   };
 
   function handleCardSave(event) {
@@ -40,14 +39,13 @@ function NewsCard({
       setCurrentId(articleData.id);
       setIsMarked(true);
     } else if (userLoggedIn && pathname === '/' && isMarked === true) {
-      api.deleteArticle(currentId)
-      console.log(articleData.id)
+      onClickDelete()
       setIsMarked(false);
     }
   }
 
   function onClickDelete() {
-    handleDelete(currentId)
+    handleDelete(_id)
   }
 
   const cardLikeButtonClassName = (
