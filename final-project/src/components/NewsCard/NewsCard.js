@@ -1,51 +1,58 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../../utils/MainApi';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function NewsCard({ 
-  cardKeyword, 
-  cardTitle, 
-  cardDescription, 
-  cardPublishedAt, 
-  cardSource, 
-  cardUrl, 
-  cardUrlToImage, 
-  _id,
+  card,
   isLoggedIn,
-  token,
   formatDate,
   handleSaveArticle,
   handleDelete
   }) {
   // news card states
   const [isMarked, setIsMarked] = React.useState(false);
-  const [currentId, setCurrentId] = React.useState(_id);
+  const currentUser = React.useContext(CurrentUserContext);
+  // const [currentId, setCurrentId] = React.useState(_id);
   const { pathname } = useLocation();
 
-  const articleData = {
-    keyword: localStorage.getItem('currentKeyword'),
-    title: cardTitle,
-    text: cardDescription,
-    date: cardPublishedAt,
-    source: cardSource,
-    link: cardUrl,
-    image: cardUrlToImage
-  };
+  React.useEffect(() => {
+    (currentUser.saved && currentUser.saved.some((article) => article.link === card.url))
+      && setIsMarked(true)
+  }, []);
+  // const articleData = {
+  //   keyword: localStorage.getItem('currentKeyword'),
+  //   title: cardTitle,
+  //   text: cardDescription,
+  //   date: cardPublishedAt,
+  //   source: cardSource,
+  //   link: cardUrl,
+  //   image: cardUrlToImage
+  // };
 
+  // function handleCardSave(event) {
+  //   const userLoggedIn = token !== null;
+  //   if (userLoggedIn && pathname === '/' && isMarked === false) {
+  //     handleSaveArticle(articleData)
+  //     setCurrentId(articleData.id);
+  //     setIsMarked(true);
+  //   } else if (userLoggedIn && pathname === '/' && isMarked === true) {
+  //     onClickDelete()
+  //     setIsMarked(false);
+  //   }
+  // }
   function handleCardSave(event) {
-    const userLoggedIn = token !== null;
-    if (userLoggedIn && pathname === '/' && isMarked === false) {
-      handleSaveArticle(articleData)
-      setCurrentId(articleData.id);
-      setIsMarked(true);
-    } else if (userLoggedIn && pathname === '/' && isMarked === true) {
-      onClickDelete()
-      setIsMarked(false);
+    event.preventDefault()
+    setIsMarked(!isMarked);
+    if (isMarked) {
+      handleDelete(currentUser.saved.find((article) => article.link === card.url))
+    } else {
+      handleSaveArticle(card)
     }
   }
 
   function onClickDelete() {
-    handleDelete(_id)
+    handleDelete(card)
   }
 
   const cardLikeButtonClassName = (
@@ -55,21 +62,23 @@ function NewsCard({
   );
 
     return(
-      <article className="news-card" id={_id || currentId}>
+      <article className="news-card">
         <div className="news-card__top">
-          <p className={`news-card__keyword ${pathname === '/' ? '' : 'news-card__keyword_visible'}`} >{cardKeyword}</p>
+          <p className={`news-card__keyword ${pathname === '/' ? '' : 'news-card__keyword_visible'}`} >{card.keyword}</p>
           <div className="news-card__icon">
             <p className="news-card__tooltip">{isLoggedIn && pathname === "/" ? "Sign in to save" : "Remove from saved"}</p>
             {pathname === '/' ? <button type="button" aria-label="bookmark" className={cardLikeButtonClassName} onClick={handleCardSave} /> 
             : <button type="trash" aria-label="bookmark" className={cardLikeButtonClassName} onClick={onClickDelete} />}
           </div>
         </div>
-        <img className="news-card__image" src={cardUrlToImage} alt={cardTitle} />
+        <img className="news-card__image" src={card.urlToImage || card.image} alt={card.title} />
         <div className="news-card__bottom">
-          <p className="news-card__date">{formatDate(cardPublishedAt)}</p>
-          <h2 className="news-card__title">{cardTitle}</h2>
-          <p className="news-card__text">{cardDescription}</p>
-          <p className="news-card__source">{cardSource}</p>
+          <p className="news-card__date">{formatDate(card.publishedAt || card.date)}</p>
+          <h2 className="news-card__title">{card.title}</h2>
+          <p className="news-card__text">{card.description || card.text}</p>
+          <a className="news-card__link" href={card.url || card.link} target='_blank' rel="noopener noreferrer">
+            <p className="news-card__source">{card.source.name || card.source}</p>
+          </a>
         </div>
       </article>
     )

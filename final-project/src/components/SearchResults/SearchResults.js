@@ -21,18 +21,11 @@ function SearchResults({
               currentDisplayedResult.map((newsCard, index) => (
                 <NewsCard
                   key={index}
-                  cardKeyword={newsCard.keyword}
-                  cardTitle={newsCard.title}
-                  cardDescription={newsCard.description}
-                  cardPublishedAt={newsCard.publishedAt}
-                  cardSource={newsCard.source.name}
-                  cardUrl={newsCard.url}
-                  cardUrlToImage={newsCard.urlToImage}
+                  card={newsCard}
                   isLoggedIn={isLoggedIn}
                   handleSaveArticle={handleSaveArticle}
                   handleDelete={handleDelete}
                   formatDate={formatDate}
-                  token={token}
                 />
                 ))}
             </div>

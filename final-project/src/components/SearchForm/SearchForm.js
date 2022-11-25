@@ -102,7 +102,6 @@ function SearchForm({
               resultSearch={searchArticles}
               handleDelete={handleDelete}
               handleSaveArticle={handleSaveArticle}
-              token={token}
               formatDate={formatDate}
               handleShowMore={() =>
                 setArticlesCount(

@@ -144,12 +144,14 @@ function App() {
     }
   };
 
+
   const handleSaveArticle = (articleData) => {
-    api.saveArticles(articleData).then((articleData) => {
-      if (articleData){
-        setsavedArticles([...savedArticles, articleData])
-        return articleData
-      }
+    api.saveArticles(articleData)
+    .then((res) => {
+      setCurrentUser((currentUser) => ({
+        ...currentUser,
+        saved: [res, ...currentUser.saved]
+      }));
     })
   };
 
@@ -161,16 +163,14 @@ function App() {
     })
   }
   
-  function handleDelete(id) {
-    api.deleteArticle(id).then((article) => {
-      if (article) {
-        const newArticles = [...savedArticles].filter((a) => a._id !== id)
-        setsavedArticles(newArticles)
-      }
+  function handleDelete(articleData) {
+    api.deleteArticle(articleData).then((res) => {
+      setCurrentUser((currentUser) => ({
+        ...currentUser,
+        saved: currentUser.saved.filter((article) => article._id !== articleData._id)
+      }))
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch((err) => console.log(err));
   };
 
   return (
@@ -203,19 +203,11 @@ function App() {
                     savedArticles.map((newsCard, index) => {
                       return (<NewsCard
                         key={index}
-                        cardKeyword={newsCard.keyword}
-                        cardTitle={newsCard.title}
-                        cardDescription={newsCard.text}
-                        cardUrl={newsCard.link}
-                        cardUrlToImage={newsCard.image}
-                        cardPublishedAt={newsCard.date}
-                        cardSource={newsCard.source}
-                        _id={newsCard._id}
+                        card={newsCard}
                         isLoggedIn={isLoggedIn}
                         handleSaveArticle={handleSaveArticle}
                         handleDelete={handleDelete}
                         formatDate={formatDate}
-                        token={token}
                       />)
                     })} 
                   </SavedNews>

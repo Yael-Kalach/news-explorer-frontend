@@ -37,7 +37,7 @@ class MainApi extends React.Component {
     }).then(this._checkResponse);
   }
 
-  saveArticles(newsCard) {
+  saveArticles({title, description, publishedAt, urlToImage, url, source }) {
     return fetch(`${this._baseUrl}/articles`, {
       headers: {
         ...this._headers,
@@ -47,18 +47,18 @@ class MainApi extends React.Component {
       method: 'POST',
       body: JSON.stringify({
         keyword: localStorage.getItem('currentKeyword'),
-        title: newsCard.title,
-        text: newsCard.text,
-        date: newsCard.date,
-        source: newsCard.source,
-        link: newsCard.link,
-        image: newsCard.image,
+        title,
+        text: description,
+        date: publishedAt,
+        source: source.name,
+        link: url,
+        image: urlToImage,
       }),
     }).then(this._checkResponse);
   }
 
-  deleteArticle(id) {
-    return fetch(`${this._baseUrl}/articles/${id}`, {
+  deleteArticle(article) {
+    return fetch(`${this._baseUrl}/articles/${article._id}`, {
       headers: {
         ...this._headers,
         'Authorization': authorization,
