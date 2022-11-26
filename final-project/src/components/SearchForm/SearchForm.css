@@ -77,8 +77,12 @@
     margin: none;
     margin-left: -164px;
     background: #2F71E5;
-    color: white;
     transition: 0.1s linear 0.1s;
+    position: relative;
+}
+
+.search-form__button_text {
+    color: white;
 }
 
 .search-form__button:hover {
@@ -98,6 +102,36 @@
     transition: 0.2s linear 0.1s;
     max-width: 100%;
     align-items: center;
+}
+
+.search-form__button_loading .search-form__button_text {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.search-form__button_loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 3px solid transparent;
+    border-top-color: white;
+    border-radius: 50%;
+    animation: search-form__button_loading_spinner 1s ease-in-out infinite;
+}
+
+@keyframes search-form__button_loading_spinner {
+    from {
+        transform: rotate(0turn)
+    }
+    to {
+        transform: rotate(1turn)
+    }
 }
 
 @media screen and (max-width: 920px){

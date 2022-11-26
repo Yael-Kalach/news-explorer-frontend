@@ -5,7 +5,7 @@ function Main({
   isLoggedIn,
   handleSaveArticle, 
   handleDelete,
-  token,
+  handleLoginPopupClick,
   formatDate
 }) {
     return (
@@ -15,7 +15,7 @@ function Main({
             isLoggedIn={isLoggedIn}
             handleSaveArticle={handleSaveArticle}
             handleDelete={handleDelete}
-            token={token}
+            handleLoginPopupClick={handleLoginPopupClick}
             formatDate={formatDate}
           />
           <About />

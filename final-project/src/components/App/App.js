@@ -7,7 +7,7 @@ import NewsCard from '../NewsCard/NewsCard';
 import Preloader from '../Preloader/Preloader';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { register, signIn, checkToken } from '../../utils/auth'
 import RegistrationPopup from '../RegistrationPopup/RegistrationPopup'
 import LoginPopup from '../LoginPopup/LoginPopup';
@@ -28,9 +28,6 @@ function App() {
   const [token, setToken] = React.useState(localStorage.getItem("jwt"))
   // Articles
   const [savedArticles, setsavedArticles] = React.useState([]);
-  // news card states
-  // const [isMarked, setIsMarked] = React.useState(false);
-  // const { pathname } = useLocation();
 
 
   // preloader mounting
@@ -53,7 +50,8 @@ function App() {
     setIsTooltipPopupOpen(false);
   };
 
-  const togglePopupPurpose = () => {
+  const togglePopupPurpose = (e) => {
+    e.preventDefault()
     setIsLoginPopupOpen(!isLoginPopupOpen);
     setIsRegistrationPopupOpen(!isRegistrationPopupOpen);
   };
@@ -133,7 +131,6 @@ function App() {
     setIsLoggedIn(false);
     localStorage.removeItem("name");
     localStorage.removeItem("jwt");
-    setsavedArticles([]);
     setCurrentUser({});
   };
   
@@ -153,6 +150,7 @@ function App() {
         saved: [res, ...currentUser.saved]
       }));
     })
+    .catch((err) => console.log(err));
   };
 
   function formatDate(date) {
@@ -207,6 +205,7 @@ function App() {
                         isLoggedIn={isLoggedIn}
                         handleSaveArticle={handleSaveArticle}
                         handleDelete={handleDelete}
+                        handleLoginPopupClick={handleLoginPopupClick}
                         formatDate={formatDate}
                       />)
                     })} 
@@ -221,6 +220,7 @@ function App() {
                 handleSaveArticle={handleSaveArticle} 
                 isLoggedIn={isLoggedIn}
                 handleDelete={handleDelete}
+                handleLoginPopupClick={handleLoginPopupClick}
                 formatDate={formatDate}
                 token={token}
               />} 

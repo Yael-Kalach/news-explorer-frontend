@@ -3,12 +3,13 @@ import React from "react";
 import SearchResults from "../SearchResults/SearchResults"
 import ResultsNotFound from "../ResultsNotFound/ResultsNotFound";
 import ResultsError from "../ResultsError/ResultsError";
+import SearchPreloader from "../SearchPreloader/SearchPreloader";
 
 function SearchForm({ 
   isLoggedIn,
   handleDelete, 
   handleSaveArticle,
-  token,
+  handleLoginPopupClick,
   formatDate
 }) {
   const DISPLAY_COUNT = 3;
@@ -29,6 +30,8 @@ function SearchForm({
   const [searchArticles, setSearchArticles] = React.useState(
     localStorage.getItem('currentArticles', [])
   );
+  // Loading
+  const [isLoading, setIsLoading] = React.useState(false)
 
   // Functions
   React.useEffect(() => {
@@ -45,6 +48,7 @@ function SearchForm({
 
   function handleSearch(e) {
     e.preventDefault();
+    setIsLoading(true)
     const currentKeyword = searchInputRef.current.value;
     setKeyword(currentKeyword);
     setSearchArticles([]);
@@ -74,7 +78,12 @@ function SearchForm({
       })
       .finally(() => {
         setIsSearching(true)
+        setIsLoading(false)
       })
+  }
+
+  function handleShowMore(){
+    setArticlesCount((articlesCount / DISPLAY_COUNT + 1) * DISPLAY_COUNT)   
   }
 
     return (
@@ -93,27 +102,28 @@ function SearchForm({
               className="search-form__input"
               required 
             />
-            <button type="submit" aria-label="Search" className="search-form__button">Search</button>
+            <button type="submit" aria-label="Search" className={`search-form__button ${isLoading ? 'search-form__button_loading' : ''}`}>
+              <span className="search-form__button_text">Search</span>
+            </button>
           </form>
         </section>
-        {isSearching ? <section className="search-results">
+          {isLoading ? <SearchPreloader /> : ''}
+          {isSearching && !isLoading ? <section className="search-results">
           {isSearchResult && (
             <SearchResults
               resultSearch={searchArticles}
               handleDelete={handleDelete}
               handleSaveArticle={handleSaveArticle}
+              handleLoginPopupClick={handleLoginPopupClick}
               formatDate={formatDate}
-              handleShowMore={() =>
-                setArticlesCount(
-                  (articlesCount / DISPLAY_COUNT + 1) * DISPLAY_COUNT
-                )
-              }
+              isLoading={isLoading}
+              handleShowMore={handleShowMore}
               isLoggedIn={isLoggedIn}
             />
           )}
           {isNotFound && <ResultsNotFound />}
           {searchErrorMessage && <ResultsError />}
-        </section> : ''}
+          </section> : ''}
       </div>
     );
   }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import api from '../../utils/MainApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function NewsCard({ 
@@ -8,7 +7,8 @@ function NewsCard({
   isLoggedIn,
   formatDate,
   handleSaveArticle,
-  handleDelete
+  handleDelete,
+  handleLoginPopupClick
   }) {
   // news card states
   const [isMarked, setIsMarked] = React.useState(false);
@@ -20,34 +20,18 @@ function NewsCard({
     (currentUser.saved && currentUser.saved.some((article) => article.link === card.url))
       && setIsMarked(true)
   }, []);
-  // const articleData = {
-  //   keyword: localStorage.getItem('currentKeyword'),
-  //   title: cardTitle,
-  //   text: cardDescription,
-  //   date: cardPublishedAt,
-  //   source: cardSource,
-  //   link: cardUrl,
-  //   image: cardUrlToImage
-  // };
 
-  // function handleCardSave(event) {
-  //   const userLoggedIn = token !== null;
-  //   if (userLoggedIn && pathname === '/' && isMarked === false) {
-  //     handleSaveArticle(articleData)
-  //     setCurrentId(articleData.id);
-  //     setIsMarked(true);
-  //   } else if (userLoggedIn && pathname === '/' && isMarked === true) {
-  //     onClickDelete()
-  //     setIsMarked(false);
-  //   }
-  // }
   function handleCardSave(event) {
     event.preventDefault()
-    setIsMarked(!isMarked);
-    if (isMarked) {
-      handleDelete(currentUser.saved.find((article) => article.link === card.url))
+    if (!isLoggedIn) {
+      handleLoginPopupClick()
     } else {
-      handleSaveArticle(card)
+      setIsMarked(!isMarked);
+      if (isMarked) {
+        handleDelete(currentUser.saved.find((article) => article.link === card.url))
+      } else {
+        handleSaveArticle(card)
+      }
     }
   }
 

@@ -7,7 +7,7 @@ function SearchResults({
   isLoggedIn, 
   handleSaveArticle, 
   handleDelete,
-  token,
+  handleLoginPopupClick,
   formatDate
 }){
     const currentArticlesCount = localStorage.getItem('currentArticlesCount');
@@ -26,6 +26,7 @@ function SearchResults({
                   handleSaveArticle={handleSaveArticle}
                   handleDelete={handleDelete}
                   formatDate={formatDate}
+                  handleLoginPopupClick={handleLoginPopupClick}
                 />
                 ))}
             </div>

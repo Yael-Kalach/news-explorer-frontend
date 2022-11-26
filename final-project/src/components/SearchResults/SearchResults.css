@@ -25,10 +25,7 @@
 }
 
 .search-results__button {
-    font-family: 'roboto', 'inter', Arial, sans-serif;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 1.3;
+    position: relative;
     height: 64px;
     width: 288px;
     border-radius: 80px;
@@ -41,6 +38,13 @@
 
 .search-results__button:hover {
     background-color: #E8E8E8;
+}
+
+.search-results__button_text {
+    font-family: 'roboto', 'inter', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.3;
 }
 
 @media screen and (max-width: 920px){

@@ -33,3 +33,7 @@
 @import url(./components/SearchResults/SearchResults.css);
 
 @import url(./components/Footer/Footer.css);
+
+@import url(./components/SearchPreloader/SearchPreloader.css);
+
+@import url(./components/TooltipPopup/TooltipPopup.css);
