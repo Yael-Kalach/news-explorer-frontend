@@ -1,0 +1,45 @@
+.searchPreloader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #F5F6F7;
+    height: 50vh;
+}
+
+.searchPreloader__container {
+    position: relative;
+}
+
+.searchPreloader__icon::after {
+    position: absolute;
+    content: "";
+    width: 100px;
+    height: 100px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 3px solid transparent;
+    border-top-color: gray;
+    border-radius: 50%;
+    animation: searchPreloader__icon 1s ease-in-out infinite;
+}
+
+.searchPreloader__text {
+    font-family: 'roboto-slab', 'inter', Arial, sans-serif;
+    color: gray;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin-top: 50px;
+}
+
+@keyframes searchPreloader__icon {
+    from {
+        transform: rotate(0turn)
+    }
+    to {
+        transform: rotate(1turn)
+    }
+}
