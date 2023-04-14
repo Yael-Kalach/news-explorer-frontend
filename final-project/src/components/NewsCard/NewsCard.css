@@ -74,6 +74,11 @@
     background-color: white;
     z-index: 5;
     margin-left: 24px;
+    visibility: hidden;
+}
+
+.news-card__keyword_visible {
+    visibility: visible;
 }
 
 .news-card__button_type_trash {
@@ -161,6 +166,10 @@
     overflow: hidden;
 }
 
+.news-card__link {
+    text-decoration: none;
+}
+
 @media screen and (max-width: 1220px){
     .news-card {
         max-width: 280px;
@@ -221,7 +230,8 @@
     }
 
     .news-card__icon {
-        padding: 0 8px
+        padding: 0 8px;
+        margin-top: 8px;
     }
 
     .news-card__keyword {

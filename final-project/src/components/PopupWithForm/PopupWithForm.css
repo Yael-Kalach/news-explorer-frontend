@@ -64,6 +64,7 @@
     font-weight: 900;
     line-height: 1.16;
     height: 32px;
+    max-width: 320px;
     margin: 0 0 22px;
 }
 
@@ -114,11 +115,6 @@
     text-align: left;
     color: #FF0000;
     margin: 5px 0 13px;
-    visibility: hidden;
-}
-
-.form__error_visible{
-    visibility: visible;
 }
 
 .form__button {
@@ -144,9 +140,11 @@
     background: #E6E8EB;
     box-shadow: 0;
     color: #B6BCBF;
+    pointer-events: none
 }
 
 .form__button_disabled:hover {
+    background: #E6E8EB;
     cursor: default;
 }
 
@@ -170,6 +168,12 @@
     background: none;
     cursor: pointer;
     padding: 5px;
+}
+
+.form__switch-link-tooltip {
+    justify-self: flex-start;
+    text-align: left;
+    margin-top: 10px;
 }
 
 @media screen and (max-width: 520px){

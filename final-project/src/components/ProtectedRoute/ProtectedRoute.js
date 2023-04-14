@@ -1,11 +1,10 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ children, loggedIn, ...props }) => {
-  return (
-        
-  loggedIn ? [ children ] : <Navigate to="/" />
-        
-)}
+const ProtectedRoute = ({ isLoggedIn, children, ...props }) => {
+
+  return isLoggedIn ? children : <Navigate {...props} to={'/'} />;
+  
+};
 
 export default ProtectedRoute;
